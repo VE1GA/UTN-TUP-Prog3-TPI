@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Wordle from "./pages/Wordle";
+
 // import Home from "./pages/Home";
 // import Board from "./components/Board";
 // import Keyboard from "./components/Keyboard";

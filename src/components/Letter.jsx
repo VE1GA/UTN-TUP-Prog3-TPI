@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import { WordleContext } from "../pages/Wordle";
 
 const Letter = ({ letterPos, attemptVal }) => {
