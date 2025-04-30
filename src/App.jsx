@@ -1,15 +1,19 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import Wordle from "./pages/Wordle";
+// import Home from "./pages/Home";
+// import Board from "./components/Board";
+// import Keyboard from "./components/Keyboard";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <div className="App">
+        <nav>
+          <h1>Wordle</h1>
+        </nav>
+        <Wordle />
+      </div>
     </>
   );
 }
