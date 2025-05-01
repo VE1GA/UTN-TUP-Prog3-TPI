@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createContext, useState } from "react";
 
 import Board from "../components/Board";
 import Keyboard from "../components/Keyboard";
-import { boardDefault } from "../components/Words";
+import { boardDefault, wordArray } from "../components/Words";
 
 export const WordleContext = createContext();
 
@@ -11,6 +11,12 @@ const Wordle = () => {
   // Estados
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
+
+  const correctWord = "RIGHT";
+
+  useEffect(() => {
+    console.log(wordArray);
+  }, []);
 
   // Funciones
   const onSelectLetter = (keyVal) => {
@@ -46,6 +52,7 @@ const Wordle = () => {
           onSelectLetter,
           onEnter,
           onDelete,
+          correctWord,
         }}
       >
         <div className="game">
