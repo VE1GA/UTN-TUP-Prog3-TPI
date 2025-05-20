@@ -1,20 +1,21 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Wordle from "./pages/Wordle";
-
-// import Home from "./pages/Home";
-// import Board from "./components/Board";
-// import Keyboard from "./components/Keyboard";
+import Register from "./pages/Register";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <div className="App">
-        <nav>
-          <h1>Wordle</h1>
-        </nav>
-        <Wordle />
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/juego" element={<Wordle />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
