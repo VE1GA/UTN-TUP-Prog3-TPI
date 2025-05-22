@@ -1,18 +1,18 @@
-import RegisterForm from "../components/registerForm";
-import Validations from "../components/Validations";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RegisterForm from "../components/registerForm";
+import Validations from "../components/Validations";
 
-function Register({ setisLoggedin }) {
+function Register() {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmpasswordRef = useRef(null);
 
-  const navegar = useNavigate();
+  const navigate = useNavigate();
 
-  const GoToProfile = () => {
-    navegar("/juego");
+  const terminarRegistro = () => {
+    navigate("/juego");
   };
 
   const [errores, setErrores] = useState({});
@@ -33,10 +33,26 @@ function Register({ setisLoggedin }) {
 
       setErrores(errores);
     } else {
-      alert("Formulario enviado con éxito");
       setErrores({});
-      // setTimeout(GoToProfile, 2000);
-      setisLoggedin(true);
+
+      fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(FormData),
+      })
+        .then((res) => res.json())
+
+        .then((data) => {
+          console.log("Usuario registrado:", data);
+          alert(data.message || "Usuario registrado con éxito!");
+        })
+
+        .catch((error) => console.error("Ocurrió un error:", error));
+
+      setTimeout(terminarRegistro, 3000);
+      // setisLoggedin(true);
     }
   };
 

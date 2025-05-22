@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
 export const Word = sequelize.define(
-  "word",
+  "words",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,7 +11,7 @@ export const Word = sequelize.define(
     },
     value: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     luck: {
       type: DataTypes.INTEGER,
