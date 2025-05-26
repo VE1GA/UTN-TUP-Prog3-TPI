@@ -5,6 +5,7 @@ import Wordle from "./pages/Wordle";
 import Register from "./pages/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Protected } from "./components/Protected";
+import { useState } from "react";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +19,7 @@ function App() {
             path="/login"
             element={<Login setIsLoggedIn={setIsLoggedIn} />}
           />
-          <Protected>
+          <Protected isLoggedIn={isLoggedIn}>
             <Route path="/juego" element={<Wordle />} />
           </Protected>
         </Routes>

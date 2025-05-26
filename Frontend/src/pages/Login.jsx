@@ -3,7 +3,7 @@ import ValidationsLogin from "../components/ValidationsLogin";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login({ setisLoggedin }) {
+function Login({ setIsLoggedIn }) {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -41,11 +41,15 @@ function Login({ setisLoggedin }) {
         .then((data) => {
           console.log("Usuario logueado:", data);
           alert(data.message || "Usuario logueado con éxito");
+          if (
+            data.message != "Usuario no existente" &&
+            data.message != "Email y/o contraseña incorrecta"
+          ) {
+            setTimeout(GoToProfile, 2000);
+            setIsLoggedIn(true);
+          }
         })
-
         .catch((error) => console.error("Ocurrió un error:", error));
-      setTimeout(GoToProfile, 2000);
-      setisLoggedin(true);
     }
   };
 
