@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const RegisterForm = ({ onSubmit, errores, refs }) => {
+const LoginForm = ({ onSubmit, errores, refs }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -49,4 +49,4 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
