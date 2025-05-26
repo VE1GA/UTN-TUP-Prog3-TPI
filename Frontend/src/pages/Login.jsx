@@ -1,16 +1,21 @@
-import LoginForm from "../components/LoginForm";
-import ValidationsLogin from "../components/ValidationsLogin";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login({ setIsLoggedIn }) {
+import LoginForm from "../components/Auth/LoginForm";
+import ValidationsLogin from "../components/Auth/LoginValidations";
+
+const Login = ({ setIsLoggedIn }) => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const navegar = useNavigate();
+  const navigate = useNavigate();
 
-  const GoToProfile = () => {
-    navegar("/juego");
+  const terminarLogueo = () => {
+    navigate("/play");
+  };
+
+  const volverAlInicio = () => {
+    navigate("/");
   };
 
   const [errores, setErrores] = useState({});
@@ -45,7 +50,7 @@ function Login({ setIsLoggedIn }) {
             data.message != "Usuario no existente" &&
             data.message != "Email y/o contraseña incorrecta"
           ) {
-            setTimeout(GoToProfile, 2000);
+            setTimeout(terminarLogueo, 1500);
             setIsLoggedIn(true);
           }
         })
@@ -62,9 +67,11 @@ function Login({ setIsLoggedIn }) {
           errores={errores}
           refs={{ emailRef, passwordRef }}
         />
+
+        <button onClick={volverAlInicio}>Volver al inicio</button>
       </div>
     </>
   );
-}
+};
 
 export default Login;

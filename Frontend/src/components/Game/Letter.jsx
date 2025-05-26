@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
-import { WordleContext } from "../pages/Wordle";
+import { WordleContext } from "../../pages/Wordle";
 
 const Letter = ({ letterPos, attemptVal }) => {
   const { board, correctWord, currAttempt } = useContext(WordleContext);
