@@ -3,6 +3,7 @@ import React from "react";
 import { Navigate } from "react-router";
 
 export const Protected = ({ isLoggedIn, children }) => {
+  console.log(isLoggedIn);
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
