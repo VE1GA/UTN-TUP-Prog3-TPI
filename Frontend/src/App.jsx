@@ -1,33 +1,37 @@
 import "./App.css";
+
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Wordle from "./pages/Wordle";
 import Register from "./pages/Register";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Protected } from "./components/Protected";
-import { useState } from "react";
+import UserProtected from "./components/UserProtected";
+import Wordle from "./pages/Wordle";
+import NotFound from "./pages/NotFound";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [usuarioLogueado, setUsuarioLogueado] = useState(false);
   return (
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route
-            path="/registro"
-            element={<Register setIsLoggedIn={setIsLoggedIn} />}
+            path="/registrarse"
+            element={<Register setIsLoggedIn={setUsuarioLogueado} />}
           />
           <Route
-            path="/login"
-            element={<Login setIsLoggedIn={setIsLoggedIn} />}
+            path="/iniciar_sesion"
+            element={<Login setIsLoggedIn={setUsuarioLogueado} />}
           />
           <Route
-            path="/juego"
+            path="/play"
             element={
-              <Protected isLoggedIn={isLoggedIn}>
+              <UserProtected isLoggedIn={usuarioLogueado}>
                 <Wordle />
-              </Protected>
+              </UserProtected>
             }
           />
         </Routes>

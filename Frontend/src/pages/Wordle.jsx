@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
-import Board from "../components/Board";
-import Keyboard from "../components/Keyboard";
-import { boardDefault, wordArray } from "../components/Words";
+import Board from "../components/Game/Board";
+import Keyboard from "../components/Game/Keyboard";
+import { boardDefault, wordArray } from "../components/Game/Words";
 
 export const WordleContext = createContext();
 
@@ -55,6 +54,9 @@ const Wordle = () => {
           correctWord,
         }}
       >
+        <nav>
+          <h1>Wordle</h1>
+        </nav>
         <div className="game">
           <Board />
           <Keyboard />

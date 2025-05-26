@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RegisterForm from "../components/registerForm";
-import Validations from "../components/Validations";
 
-function Register({ setIsLoggedIn }) {
+import RegisterForm from "../components/Auth/RegisterForm";
+import Validations from "../components/Auth/RegisterValidations";
+
+const Register = ({ setIsLoggedIn }) => {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -12,7 +13,11 @@ function Register({ setIsLoggedIn }) {
   const navigate = useNavigate();
 
   const terminarRegistro = () => {
-    navigate("/juego");
+    navigate("/play");
+  };
+
+  const volverAlInicio = () => {
+    navigate("/");
   };
 
   const [errores, setErrores] = useState({});
@@ -51,7 +56,7 @@ function Register({ setIsLoggedIn }) {
 
         .catch((error) => console.error("Ocurrió un error:", error));
 
-      setTimeout(terminarRegistro, 3000);
+      setTimeout(terminarRegistro, 1500);
       setIsLoggedIn(true);
     }
   };
@@ -65,9 +70,11 @@ function Register({ setIsLoggedIn }) {
           errores={errores}
           refs={{ nameRef, emailRef, passwordRef, confirmpasswordRef }}
         />
+
+        <button onClick={volverAlInicio}>Volver al inicio</button>
       </div>
     </>
   );
-}
+};
 
 export default Register;

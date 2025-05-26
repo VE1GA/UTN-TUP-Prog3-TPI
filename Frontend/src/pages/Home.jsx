@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -7,10 +6,10 @@ const Home = () => {
   return (
     <>
       <div>
-        <h1>BIENVENIDO 👋</h1>
+        <h1>Página principal 🏠</h1>
         <button
           onClick={() => {
-            navigate("/registro");
+            navigate("/registrarse");
           }}
         >
           Registrarse
@@ -18,16 +17,11 @@ const Home = () => {
 
         <button
           onClick={() => {
-            navigate("/login");
+            navigate("/iniciar_sesion");
           }}
         >
-          Logearse
+          Iniciar sesión
         </button>
-
-        {/* <nav>
-          <h1>Wordle</h1>
-        </nav>
-        <Wordle /> */}
       </div>
     </>
   );

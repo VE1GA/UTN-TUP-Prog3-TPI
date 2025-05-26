@@ -1,5 +1,11 @@
-const ValidationsLogin = ({ datos }) => {
+const RegisterValidations = ({ datos }) => {
   const errores = {};
+
+  if (!datos.name.trim()) {
+    errores.name = "El nombre es obligatorio";
+  } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(datos.name)) {
+    errores.name = "Solo se permiten letras";
+  }
 
   if (!datos.email.trim()) {
     errores.email = "El email es obligatorio";
@@ -16,4 +22,4 @@ const ValidationsLogin = ({ datos }) => {
   return errores;
 };
 
-export default ValidationsLogin;
+export default RegisterValidations;

@@ -1,7 +1,7 @@
-import React, { useContext, useCallback, useEffect } from "react";
+import { useContext, useCallback, useEffect } from "react";
 
 import Key from "./Key";
-import { WordleContext } from "../pages/Wordle";
+import { WordleContext } from "../../pages/Wordle";
 
 const Keyboard = () => {
   const { onEnter, onDelete, onSelectLetter } = useContext(WordleContext);
