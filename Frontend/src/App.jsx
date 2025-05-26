@@ -14,14 +14,22 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/registro" element={<Register />} />
+          <Route
+            path="/registro"
+            element={<Register setIsLoggedIn={setIsLoggedIn} />}
+          />
           <Route
             path="/login"
             element={<Login setIsLoggedIn={setIsLoggedIn} />}
           />
-          <Protected isLoggedIn={isLoggedIn}>
-            <Route path="/juego" element={<Wordle />} />
-          </Protected>
+          <Route
+            path="/juego"
+            element={
+              <Protected isLoggedIn={isLoggedIn}>
+                <Wordle />
+              </Protected>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>

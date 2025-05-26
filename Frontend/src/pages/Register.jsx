@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RegisterForm from "../components/registerForm";
 import Validations from "../components/Validations";
 
-function Register() {
+function Register({ setIsLoggedIn }) {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -52,7 +52,7 @@ function Register() {
         .catch((error) => console.error("Ocurrió un error:", error));
 
       setTimeout(terminarRegistro, 3000);
-      // setisLoggedin(true);
+      setIsLoggedIn(true);
     }
   };
 
