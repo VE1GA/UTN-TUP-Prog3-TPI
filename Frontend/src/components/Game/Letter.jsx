@@ -11,7 +11,7 @@ const Letter = ({ letterPos, attemptVal }) => {
 
   const letterState =
     currAttempt.attempt > attemptVal &&
-    (correct ? "correct" : almost ? "almost" : "error");
+    (correct ? "correct" : almost.toUpperCase() ? "almost" : "error");
   return (
     <div className="letter" id={letterState}>
       {letter}
