@@ -23,7 +23,7 @@ const Register = ({ setIsLoggedIn }) => {
   const [errores, setErrores] = useState({});
 
   const manejarEnvio = (FormData) => {
-    const errores = Validations({ datos: FormData });
+    const errores = Validations(FormData);
 
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {

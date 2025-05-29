@@ -1,4 +1,5 @@
-import "./App.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/App.css";
 
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -6,9 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import UserProtected from "./components/UserProtected";
 import Wordle from "./pages/Wordle";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import UserProtected from "./components/UserProtected";
+
 import UserForm from "./components/Dashboard/UserForm";
 
 function App() {
@@ -19,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
-          <Route path="/admin_users" element={<UserForm />} />
+          <Route path="/admin_dashboard/*" element={<AdminDashboard />} />
           <Route
             path="/registrarse"
             element={<Register setIsLoggedIn={setUsuarioLogueado} />}

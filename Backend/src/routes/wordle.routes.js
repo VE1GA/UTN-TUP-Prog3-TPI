@@ -13,9 +13,9 @@ router.post("/login", auth.loginUser);
 // Endpoints de cuentas de usuarios
 router.get("/users/", users.getUserList);
 router.delete("/users/:id", users.DeleteUser);
-// router.put("/users/:id", auth.EditExistingUser);
+router.put("/users/:id", users.EditExistingUser);
 
-// Endpoints del pool de palabras
+// Endpoints del banco de palabras
 router.post("/words/:id", words.createNewWord);
 router.get("/words/", words.getWordList);
 router.delete("/words/:id", words.DeleteWord);

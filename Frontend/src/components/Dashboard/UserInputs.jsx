@@ -1,7 +1,13 @@
 import { useEffect, useState, useRef } from "react";
+
+import { Form } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
+
 import Validations from "../Auth/RegisterValidations";
 
 const UserInputs = ({
+  idEdit,
+  esEditado,
   nameEdit,
   emailEdit,
   roleEdit,
@@ -21,18 +27,13 @@ const UserInputs = ({
   const passwordRef = useRef(null);
   const checkRef = useRef(null);
 
-  const { id } = formData;
-
   useEffect(() => {
     setFormData({
-      name: nameEdit,
-      email: emailEdit,
+      name: esEditado.name,
+      email: esEditado.email,
+      password: "",
+      role: esEditado.role === "ADMIN",
     });
-    if (roleEdit === "USER") {
-      setFormData((prev) => ({ ...prev, role: false }));
-    } else {
-      setFormData((prev) => ({ ...prev, role: true }));
-    }
   }, []);
 
   const handleChange = (e) => {
@@ -51,7 +52,9 @@ const UserInputs = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const errores = Validations({ datos: FormData });
+    console.log(formData);
+
+    const errores = Validations(formData);
 
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {
@@ -65,16 +68,22 @@ const UserInputs = ({
       setErrores(errores);
     } else {
       setErrores({});
-      fetch(`http://localhost:3000/users/${id}`, {
+
+      setFormData({
+        ...formData,
+        role: formData.role ? "ADMIN" : "USER",
+      });
+
+      fetch(`http://localhost:3000/users/${esEditado.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify(formData),
       });
       usuarioFetch();
-      setEsEditado((prev) => ({ ...prev, esEditado: false }));
-      alert("Cambios guardados");
+      setEsEditado({ id: "", name: "", email: "", role: "", esEditado: false });
+      alert(`Usuario ${formData.name} modificado correctamente`);
     }
   };
 
@@ -112,19 +121,23 @@ const UserInputs = ({
           ref={passwordRef}
         />
         {errores.password && <p style={{ color: "red" }}>{errores.password}</p>}
-        <label>
-          <input
-            type="checkbox"
-            checked={formData.role}
-            onChange={handleCheck}
-            name="role"
-            value={formData.role}
-            ref={checkRef}
-          />
-          Es admin?
-        </label>
+        <Form.Check
+          type="switch"
+          id="custom-switch"
+          label="¿Es administrador?"
+          checked={formData.role}
+          onChange={handleCheck}
+          name="role"
+          value={formData.role}
+          ref={checkRef}
+        />
       </div>
-      <button type="submit">Cambios confirmar</button>
+      <button type="submit">
+        <Icon.CheckCircleFill color="#0FC41A" size={20} />
+      </button>
+      <button onClick={() => setEsEditado({ esEditado: false })}>
+        <Icon.XCircleFill color="#FF3333" size={20} />
+      </button>
     </form>
   );
 };

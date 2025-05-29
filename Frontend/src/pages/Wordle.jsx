@@ -55,7 +55,7 @@ const Wordle = () => {
 
   // Renderizado
   return (
-    <div>
+    <div className="App">
       <WordleContext.Provider
         value={{
           board,

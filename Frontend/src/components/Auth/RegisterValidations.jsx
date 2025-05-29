@@ -1,4 +1,4 @@
-const RegisterValidations = ({ datos }) => {
+const RegisterValidations = (datos) => {
   const errores = {};
 
   if (!datos.name.trim()) {
