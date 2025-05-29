@@ -5,7 +5,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
     name: "",
     email: "",
     password: "",
-    confirmpassword: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -59,13 +59,13 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
         <label>Confirmar Contraseña: </label>
         <input
           type="password"
-          name="confirmpassword"
-          value={formData.confirmpassword}
+          name="confirmPassword"
+          value={formData.confirmPassword}
           onChange={handleChange}
           ref={refs.confirmpasswordRef}
         />
-        {errores.confirmpassword && (
-          <p style={{ color: "red" }}>{errores.confirmpassword}</p>
+        {errores.confirmPassword && (
+          <p style={{ color: "red" }}>{errores.confirmPassword}</p>
         )}
       </div>
       <button type="submit">Enviar</button>

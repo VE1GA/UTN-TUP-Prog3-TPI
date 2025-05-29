@@ -12,3 +12,9 @@ export const DeleteUser = async (req, res) => {
   await User.destroy({ where: { id } });
   res.send(`Borrando usuario con ${id}`);
 };
+
+export const EditExistingUser = async (req, res) => {
+  const { id } = req.params;
+  await User.update(req.body, { where: { id } });
+  res.send(`Editando usuario con ${id}`);
+};

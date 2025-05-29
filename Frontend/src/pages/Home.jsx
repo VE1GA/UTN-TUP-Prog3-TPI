@@ -22,6 +22,20 @@ const Home = () => {
         >
           Iniciar sesión
         </button>
+
+        <p>
+          <br />
+          <br />
+          <br />
+          Botón supersecreto 🤫
+        </p>
+        <button
+          onClick={() => {
+            navigate("/admin_dashboard");
+          }}
+        >
+          🛠️
+        </button>
       </div>
     </>
   );

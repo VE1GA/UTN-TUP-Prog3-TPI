@@ -1,0 +1,192 @@
+/* @import "tailwindcss"; */
+
+/* GLOBALES Y RESETS */
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden; /* Evita scroll no deseado */
+}
+
+/* Contenedor principal de la aplicación */
+.App {
+  text-align: center;
+  background-color: #121212;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* Apila elementos verticalmente */
+  color: white;
+  overflow: hidden; /* Controla el desbordamiento general */
+  justify-content: flex-start; /* Alinea elementos al inicio del contenedor */
+  align-items: center; /* Centra el contenido horizontalmente */
+}
+
+/* Barra de navegación */
+nav {
+  height: 60px; /* Altura fija para la navegación */
+  width: 100%;
+  border-bottom: 1px solid grey;
+  display: flex; /* Usamos flexbox para centrar el título */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  flex-shrink: 0; /* Asegura que la nav mantenga su altura */
+  padding: 0 10px; /* Pequeño padding horizontal */
+  box-sizing: border-box;
+}
+
+nav h1 {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  color: white;
+  /* El tamaño de fuente para el título Wordle, se ajusta a la pantalla */
+  font-size: clamp(30px, 8vw, 45px); /* min:30px, ideal:8vw, max:45px */
+}
+
+/* Contenedor principal del juego (tablero + teclado) */
+.game {
+  width: 100%;
+  flex-grow: 1; /* Permite que .game ocupe el espacio restante */
+  display: flex;
+  flex-direction: column; /* Apila el tablero y el teclado verticalmente */
+  align-items: center; /* Centra horizontalmente el tablero y teclado */
+  justify-content: center; /* Centra el contenido del juego verticalmente */
+  padding: 10px 0 20px; /* Padding superior, sin padding en el medio, padding inferior */
+  box-sizing: border-box;
+}
+
+/* Tablero de juego (Grid de letras) */
+.board {
+  /*
+    Usamos 'min' para que el tablero no sea ni muy grande ni muy pequeño.
+    Se adaptará al 90% del ancho del viewport, pero no más de 350px.
+    La altura se manejará implícitamente por el tamaño de sus filas/letras.
+  */
+  width: min(90vw, 350px); /* Ancho máximo 350px, pero responsivo a 90vw */
+  height: auto; /* La altura se adaptará al contenido */
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Espacio entre filas */
+  box-sizing: border-box;
+  flex-shrink: 0; /* No se encoge, así mantiene su tamaño definido */
+  /* Remove flex-grow here to prevent stretching */
+  margin-bottom: 0px; /* Espacio fijo entre el tablero y el teclado */
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* Centra las casillas en la fila */
+  align-items: center; /* Alinea verticalmente las casillas */
+  /* Remove flex-grow here to prevent vertical stretching of rows if board is tall */
+  gap: 6px; /* Espacio entre casillas */
+  width: 100%; /* Asegura que la fila ocupe el ancho completo disponible */
+}
+
+.letter {
+  /*
+    La clave para casillas cuadradas y responsivas.
+    Usamos el mismo 'min' truco que el tablero para la base del tamaño de la celda.
+    Luego el aspect-ratio para garantizar que sea cuadrada.
+  */
+  flex-grow: 1; /* Crece para ocupar el espacio disponible */
+  flex-basis: 0; /* Base para distribución equitativa */
+  /*
+    La altura se define con min/max, y aspect-ratio garantiza el cuadrado.
+    Esto evita el "padding-bottom: 100%; height: 0;" que causaba el estiramiento vertical.
+    Browser support for aspect-ratio is good now (https://caniuse.com/css-aspect-ratio).
+  */
+  height: min(
+    60px,
+    16vw
+  ); /* Define la altura de la casilla, ajustando según el viewport */
+  /* min: 60px para el tamaño más grande, 16vw para responsividad */
+  aspect-ratio: 1 / 1; /* ¡Hace que la casilla sea cuadrada! */
+
+  border: 2px solid grey; /* Aumentado a 2px para que se vean más */
+  border-radius: 4px;
+  display: flex; /* Usamos flex para centrar contenido */
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(
+    20px,
+    6vw,
+    32px
+  ); /* Tamaño de fuente responsivo para las letras */
+  font-weight: bolder;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box; /* Incluye border y padding en el cálculo del tamaño */
+}
+
+/* IMPORTANTE: Si la letra es texto directo, la centrará.
+   Si la letra está dentro de un SPAN, este es el estilo para centrarlo.
+   Asegúrate de que la letra esté directamente dentro de .letter o crea un span para ella.
+*/
+/* Si tu letra está dentro de un span, ya no necesitas absolute/translate con aspect-ratio */
+/* El display: flex en .letter ya debería centrar el contenido */
+
+/* Estados de las casillas */
+#correct {
+  background-color: #528d4e;
+  border-color: #528d4e; /* Hacer el borde del mismo color */
+}
+
+#almost {
+  background-color: #b49f39;
+  border-color: #b49f39;
+}
+
+#error {
+  background-color: #3a393c;
+  border-color: #3a393c;
+}
+
+.keyboard {
+  width: 700px;
+  height: 300px;
+  margin-top: 0px;
+}
+
+.line1 {
+  flex: 33%;
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+.line2 {
+  flex: 33%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px;
+}
+.line3 {
+  flex: 33%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px;
+}
+
+.key {
+  width: 50px;
+  height: 68px;
+  margin: 5px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background-color: grey;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+#big {
+  width: 100px;
+}
+#disabled {
+  background-color: #3a393c;
+}

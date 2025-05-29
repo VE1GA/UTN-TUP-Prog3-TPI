@@ -32,7 +32,6 @@ const Login = ({ setIsLoggedIn }) => {
 
       setErrores(errores);
     } else {
-      alert("Formulario enviado con éxito");
       setErrores({});
       fetch("http://localhost:3000/login", {
         method: "POST",
