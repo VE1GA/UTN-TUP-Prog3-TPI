@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import UserProtected from "./components/UserProtected";
 import Wordle from "./pages/Wordle";
 import NotFound from "./pages/NotFound";
+import UserForm from "./components/Dashboard/UserForm";
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(false);
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
+          <Route path="/admin_users" element={<UserForm />} />
           <Route
             path="/registrarse"
             element={<Register setIsLoggedIn={setUsuarioLogueado} />}
