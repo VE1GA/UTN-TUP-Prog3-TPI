@@ -34,8 +34,10 @@ export const User = sequelize.define(
   }
 );
 
-// Hook para hashear la contraseña antes de guardar
-User.beforeSave(async (user) => {
+export const hashPassword = async (user) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
-});
+};
+
+// Hook para hashear la contraseña antes de guardar
+User.beforeCreate(hashPassword);

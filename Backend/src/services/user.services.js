@@ -1,6 +1,4 @@
-import bcrypt from "bcryptjs";
-
-import { User } from "../models/User.js";
+import { User, hashPassword } from "../models/User.js";
 
 export const getUserList = async (req, res) => {
   const UserList = await User.findAll();
@@ -15,6 +13,7 @@ export const DeleteUser = async (req, res) => {
 
 export const EditExistingUser = async (req, res) => {
   const { id } = req.params;
+  await hashPassword(req.body);
   await User.update(req.body, { where: { id } });
   res.send(`Editando usuario con ${id}`);
 };

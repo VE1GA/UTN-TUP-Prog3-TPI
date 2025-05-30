@@ -76,7 +76,7 @@ const Wordle = () => {
         </nav>
         <div className="game">
           <Board />
-          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+          {/* {gameOver.gameOver ? <GameOver /> : <Keyboard />} */}
           <Keyboard />
         </div>
       </WordleContext.Provider>
