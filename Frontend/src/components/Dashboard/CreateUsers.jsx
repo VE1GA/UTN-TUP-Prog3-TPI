@@ -5,7 +5,7 @@ import * as Icon from "react-bootstrap-icons";
 
 import Validations from "../Auth/RegisterValidations";
 
-const UserInputs = ({ esEditado, usuarioFetch, setEsEditado }) => {
+const CreateUsers = ({ esEditado, usuarioFetch, setEsEditado }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -134,4 +134,4 @@ const UserInputs = ({ esEditado, usuarioFetch, setEsEditado }) => {
   );
 };
 
-export default UserInputs;
+export default CreateUsers;

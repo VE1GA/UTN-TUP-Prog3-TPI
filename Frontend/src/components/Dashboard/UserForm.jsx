@@ -12,6 +12,7 @@ const UserForm = () => {
     role: "",
     esEditado: false,
   });
+  const [esCreado, setEsCreado] = useState(false);
 
   const userFetch = async () => {
     await fetch("http://localhost:3000/users")
@@ -44,8 +45,15 @@ const UserForm = () => {
     });
   };
 
+  const esCrea = { name: "", email: "", password: "", role: "" };
+
+  const handleCreate = () => {
+    setEsCreado(true);
+  };
+
   return (
     <div>
+      <button onClick={handleCreate}>Crear usuario</button>
       <ul>
         {userList.map((user) => (
           <li key={user.id}>
@@ -62,6 +70,11 @@ const UserForm = () => {
             </button>
           </li>
         ))}
+        {esCreado ? (
+          <div>
+            <UserInputs props={esCrea} />
+          </div>
+        ) : null}
         {esEditado.esEditado ? (
           <div>
             <UserInputs
