@@ -6,6 +6,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "USER",
   });
 
   const handleChange = (e) => {
@@ -62,7 +63,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
-          ref={refs.confirmpasswordRef}
+          ref={refs.confirmPasswordRef}
         />
         {errores.confirmPassword && (
           <p style={{ color: "red" }}>{errores.confirmPassword}</p>

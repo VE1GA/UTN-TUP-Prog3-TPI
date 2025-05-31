@@ -1,91 +1,186 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+import { Form } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 
-import UserInputs from "./UserInputs";
+import Validations from "../Auth/RegisterValidations";
 
-const UserForm = () => {
-  const [userList, setUserList] = useState([]);
-  const [esEditado, setEsEditado] = useState({
-    id: "",
+const UserForm = ({
+  tipoLlamada,
+  getUserList,
+  userTemporal,
+  setUserTemporal,
+}) => {
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "",
-    esEditado: false,
+    password: "",
+    role: false,
   });
-  const [esCreado, setEsCreado] = useState(false);
+  const [errores, setErrores] = useState({});
 
-  const userFetch = async () => {
-    await fetch("http://localhost:3000/users")
-      .then((response) => response.json())
-      .then((data) => setUserList(data))
-      .catch((error) => console.log(error));
-  };
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const checkRef = useRef(null);
 
-  useEffect(() => {
-    userFetch();
-  }, []);
+  if (tipoLlamada === "Editar") {
+    useEffect(() => {
+      setFormData({
+        name: userTemporal.name,
+        email: userTemporal.email,
+        password: "",
+        role: userTemporal.role === "ADMIN",
+      });
+    }, []);
+  }
 
-  const handleDelete = (id) => {
-    fetch(`http://localhost:3000/users/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
-    userFetch();
-  };
-
-  const handleEdit = (user) => {
-    setEsEditado({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      esEditado: true,
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const esCrea = { name: "", email: "", password: "", role: "" };
+  const handleCheck = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.checked,
+    });
+  };
 
-  const handleCreate = () => {
-    setEsCreado(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    const errores = Validations(formData);
+
+    if (Object.keys(errores).length > 0) {
+      if (errores.name && nameRef.current) {
+        nameRef.current.focus();
+      } else if (errores.email && emailRef.current) {
+        emailRef.current.focus();
+      } else if (errores.password && passwordRef.current) {
+        passwordRef.current.focus();
+      }
+
+      setErrores(errores);
+    } else {
+      setErrores({});
+
+      const datosEnviar = {
+        ...formData,
+        role: formData.role ? "ADMIN" : "USER",
+      };
+
+      if (tipoLlamada === "Crear") {
+        await fetch("http://localhost:3000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datosEnviar),
+        });
+        getUserList();
+        setUserTemporal({
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          userTemporal: false,
+        });
+        alert(`${datosEnviar.role} ${datosEnviar.name} creado correctamente`);
+      }
+
+      if (tipoLlamada === "Editar") {
+        await fetch(`http://localhost:3000/users/${userTemporal.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datosEnviar),
+        });
+        getUserList();
+        setUserTemporal({
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          creando: false,
+          editando: false,
+        });
+        alert(
+          `${datosEnviar.role} ${datosEnviar.name} modificado correctamente`
+        );
+      }
+    }
   };
 
   return (
-    <div>
-      <button onClick={handleCreate}>Crear usuario</button>
-      <ul>
-        {userList.map((user) => (
-          <li key={user.id}>
-            {user.name} - {user.email} - {user.role} -
-            <button onClick={() => handleEdit(user)}>
-              <Icon.PencilFill color="#EBAE2D" />
-            </button>
-            <button
-              onClick={() => {
-                handleDelete(user.id);
-              }}
-            >
-              <Icon.Trash3Fill color="#FF3333" />
-            </button>
-          </li>
-        ))}
-        {esCreado ? (
-          <div>
-            <UserInputs props={esCrea} />
-          </div>
-        ) : null}
-        {esEditado.esEditado ? (
-          <div>
-            <UserInputs
-              usuarioFetch={userFetch}
-              esEditado={esEditado}
-              setEsEditado={setEsEditado}
-            />
-          </div>
-        ) : null}
-      </ul>
-    </div>
+    <form onSubmit={handleSubmit} noValidate>
+      <div>
+        <label>Nombre: </label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          ref={nameRef}
+        />
+        {errores.name && <p style={{ color: "red" }}>{errores.name}</p>}
+      </div>
+
+      <div>
+        <label>Email: </label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          ref={emailRef}
+        />
+        {errores.email && <p style={{ color: "red" }}>{errores.email}</p>}
+      </div>
+
+      <div>
+        <label>Contraseña: </label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          ref={passwordRef}
+        />
+        {errores.password && <p style={{ color: "red" }}>{errores.password}</p>}
+      </div>
+
+      <div>
+        <Form.Check
+          type="switch"
+          id="custom-switch"
+          label="¿Es administrador?"
+          checked={formData.role}
+          onChange={handleCheck}
+          name="role"
+          value={formData.role}
+          ref={checkRef}
+        />
+      </div>
+      <button type="submit">
+        <Icon.CheckCircleFill color="#0FC41A" size={20} />
+      </button>
+      <button
+        onClick={() =>
+          setUserTemporal({
+            ...userTemporal,
+            editando: false,
+            creando: false,
+          })
+        }
+      >
+        <Icon.XCircleFill color="#FF3333" size={20} />
+      </button>
+    </form>
   );
 };
 

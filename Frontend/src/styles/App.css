@@ -1,12 +1,5 @@
 /* @import "tailwindcss"; */
 
-/* GLOBALES Y RESETS */
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden; /* Evita scroll no deseado */
-}
-
 /* Contenedor principal de la aplicación */
 .App {
   text-align: center;

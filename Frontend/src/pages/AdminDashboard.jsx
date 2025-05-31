@@ -1,6 +1,7 @@
 import { useNavigate, Routes, Route } from "react-router-dom";
 
-import UserForm from "../components/Dashboard/UserForm";
+import ManageUsers from "../components/Dashboard/ManageUsers";
+import ManageWords from "../components/Dashboard/ManageWords";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ const AdminDashboard = () => {
       </button>
 
       <Routes>
-        <Route path="administrar_usuarios" element={<UserForm />} />
-        {/* <Route path="administrar_palabras" element={<WordForm />} /> */}
+        <Route path="administrar_usuarios" element={<ManageUsers />} />
+        <Route path="administrar_palabras" element={<ManageWords />} />
       </Routes>
     </>
   );

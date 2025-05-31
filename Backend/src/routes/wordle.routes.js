@@ -11,13 +11,13 @@ router.post("/register", auth.registerUser);
 router.post("/login", auth.loginUser);
 
 // Endpoints de cuentas de usuarios
-router.get("/users/", users.getUserList);
+router.get("/users", users.getUserList);
 router.delete("/users/:id", users.DeleteUser);
 router.put("/users/:id", users.EditExistingUser);
 
 // Endpoints del banco de palabras
 router.post("/words/:id", words.createNewWord);
-router.get("/words/", words.getWordList);
+router.get("/words", words.getWordList);
 router.delete("/words/:id", words.DeleteWord);
 router.put("/words/:id", words.EditExistingWord);
 
