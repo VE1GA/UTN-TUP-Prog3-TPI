@@ -13,7 +13,7 @@ const ManageWords = () => {
     editando: false,
   });
 
-  const getWordList = async () => {
+  const getWordsList = async () => {
     await fetch("http://localhost:3000/words")
       .then((response) => response.json())
       .then((data) => setWordList(data))
@@ -21,20 +21,20 @@ const ManageWords = () => {
   };
 
   useEffect(() => {
-    getWordList();
+    getWordsList();
   }, []);
 
-  const handleDelete = async (id) => {
-    fetch(`http://localhost:3000/words/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
-    await getWordList();
+  const createHandler = () => {
+    setWordTemporal({
+      id: "",
+      value: "",
+      luck: "",
+      creando: true,
+      editando: false,
+    });
   };
 
-  const handleEdit = (word) => {
+  const editHandler = (word) => {
     setWordTemporal({
       id: word.id,
       value: word.value,
@@ -44,51 +44,46 @@ const ManageWords = () => {
     });
   };
 
-  const handleCreate = () => {
-    setWordTemporal({ ...wordTemporal, creando: true, editando: false });
+  const deleteHandler = async (id) => {
+    await fetch(`http://localhost:3000/words/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+    await getWordsList();
   };
 
   return (
     <div>
-      <button onClick={handleCreate}>Crear palabras</button>
+      <button onClick={createHandler}>Crear palabras</button>
 
       <ul>
         {wordList.map((word) => (
           <li key={word.id}>
             {word.value} - {word.luck} -{" "}
-            <button onClick={() => handleEdit(word)}>
+            <button onClick={() => editHandler(word)}>
               <Icon.PencilFill color="#EBAE2D" />
             </button>
             <button
               onClick={() => {
-                handleDelete(word.id);
+                deleteHandler(word.id);
               }}
             >
               <Icon.Trash3Fill color="#FF3333" />
             </button>
           </li>
         ))}
+
         {wordTemporal.creando || wordTemporal.editando ? (
           <div>
             <WordsForm
-              tipoLlamada={"Crear"}
-              wordTemporal={{}}
+              wordTemporal={wordTemporal}
               setWordTemporal={setWordTemporal}
-              getWordList={getWordList}
+              getWordsList={getWordsList}
             />
           </div>
         ) : null}
-
-        {/* {wordTemporal.editando ? (
-          <div>
-            <WordsForm
-              tipoLlamada={"Editar"}
-              wordTemporal={wordTemporal}
-              setWordTemporal={setWordTemporal}
-              getWordList={getWordList}
-            />
-          </div>
-        ) : null} */}
       </ul>
     </div>
   );

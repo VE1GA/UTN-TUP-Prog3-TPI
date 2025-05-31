@@ -2,9 +2,10 @@ import { useEffect, useState, useRef } from "react";
 
 import * as Icon from "react-bootstrap-icons";
 
-import WordValidations from "../WordValidations";
+import WordsValidations from "../WordsValidations";
 
-const WordsForm = ({ getWordList, wordTemporal, setWordTemporal }) => {
+const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
+  // Declaraciones
   const [formData, setFormData] = useState({
     value: "",
     luck: "",
@@ -16,27 +17,31 @@ const WordsForm = ({ getWordList, wordTemporal, setWordTemporal }) => {
 
   const tipoLlamada = wordTemporal.creando ? "Creando" : "Editando";
 
+  let endpoint;
+  let metodo;
+  let mensaje;
+
+  // Rellenado de los campos con los datos de la palabra (o vacío si se está creando)
   useEffect(() => {
-    if (tipoLlamada === "Editando") {
-      setFormData({
-        value: wordTemporal.value,
-        luck: String(wordTemporal.luck),
-      });
-    }
+    setFormData({
+      value: wordTemporal.value,
+      luck: String(wordTemporal.luck),
+    });
   }, [wordTemporal]);
 
-  const handleChange = (e) => {
+  // Guardar los cambios que hace el usuario en el formulario
+  const changeHandler = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  // Manejar lo que sucede al pulsar el botón "✅"
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
-    const errores = WordValidations(formData);
+    const errores = WordsValidations(formData);
 
     if (Object.keys(errores).length > 0) {
       if (errores.value && valueRef.current) {
@@ -49,51 +54,43 @@ const WordsForm = ({ getWordList, wordTemporal, setWordTemporal }) => {
     } else {
       setErrores({});
 
-      if (tipoLlamada === "Crear") {
-        await fetch("http://localhost:3000/words", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        await getWordList();
-        setWordTemporal({
-          id: "",
-          value: "",
-          creando: false,
-        });
-        alert(`La palabra ${formData.value} se añadió correctamente`);
+      if (tipoLlamada === "Creando") {
+        endpoint = "http://localhost:3000/words";
+        metodo = "POST";
+        mensaje = "se añadió correctamente";
+      } else if (tipoLlamada === "Editando") {
+        endpoint = `http://localhost:3000/words/${wordTemporal.id}`;
+        metodo = "PUT";
+        mensaje = "se modificó correctamente";
       }
 
-      if (tipoLlamada === "Editando") {
-        await fetch(`http://localhost:3000/words/${wordTemporal.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        await getWordList();
-        setWordTemporal({
-          id: "",
-          value: "",
-          editando: false,
-        });
-        alert(`La palabra ${formData.value} se modificó correctamente`);
-      }
+      await fetch(endpoint, {
+        method: metodo,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      await getWordsList();
+      setWordTemporal({
+        id: "",
+        value: "",
+        creando: false,
+        editando: false,
+      });
+      alert(`La palabra ${formData.value} ${mensaje}`);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={submitHandler} noValidate>
       <div>
         <label>Valor: </label>
         <input
           type="text"
           name="value"
           value={formData.value}
-          onChange={handleChange}
+          onChange={changeHandler}
           ref={valueRef}
         />
         {errores.value && <p style={{ color: "red" }}>{errores.value}</p>}
@@ -105,7 +102,7 @@ const WordsForm = ({ getWordList, wordTemporal, setWordTemporal }) => {
           type="text"
           name="luck"
           value={formData.luck}
-          onChange={handleChange}
+          onChange={changeHandler}
           ref={luckRef}
         />
         {errores.luck && <p style={{ color: "red" }}>{errores.luck}</p>}

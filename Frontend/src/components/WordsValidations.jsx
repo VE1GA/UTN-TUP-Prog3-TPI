@@ -1,4 +1,4 @@
-const WordValidations = (datos) => {
+const WordsValidations = (datos) => {
   const errores = {};
 
   if (!datos.value.trim()) {
@@ -21,4 +21,4 @@ const WordValidations = (datos) => {
   return errores;
 };
 
-export default WordValidations;
+export default WordsValidations;

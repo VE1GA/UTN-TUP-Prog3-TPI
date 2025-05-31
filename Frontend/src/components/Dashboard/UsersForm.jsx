@@ -5,12 +5,7 @@ import * as Icon from "react-bootstrap-icons";
 
 import Validations from "../Auth/RegisterValidations";
 
-const UserForm = ({
-  tipoLlamada,
-  getUserList,
-  userTemporal,
-  setUserTemporal,
-}) => {
+const UserForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,34 +19,36 @@ const UserForm = ({
   const passwordRef = useRef(null);
   const checkRef = useRef(null);
 
-  if (tipoLlamada === "Editar") {
-    useEffect(() => {
-      setFormData({
-        name: userTemporal.name,
-        email: userTemporal.email,
-        password: "",
-        role: userTemporal.role === "ADMIN",
-      });
-    }, []);
-  }
+  const tipoLlamada = userTemporal.creando ? "Creando" : "Editando";
 
-  const handleChange = (e) => {
+  let endpoint;
+  let metodo;
+  let mensaje;
+
+  useEffect(() => {
+    setFormData({
+      name: userTemporal.name,
+      email: userTemporal.email,
+      password: "",
+      role: userTemporal.role === "ADMIN",
+    });
+  }, [userTemporal]);
+
+  const changeHandler = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-
-  const handleCheck = (e) => {
+  const checkHandler = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.checked,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     const errores = Validations(formData);
 
@@ -73,58 +70,45 @@ const UserForm = ({
         role: formData.role ? "ADMIN" : "USER",
       };
 
-      if (tipoLlamada === "Crear") {
-        await fetch("http://localhost:3000/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datosEnviar),
-        });
-        getUserList();
-        setUserTemporal({
-          id: "",
-          name: "",
-          email: "",
-          role: "",
-          userTemporal: false,
-        });
-        alert(`${datosEnviar.role} ${datosEnviar.name} creado correctamente`);
+      if (tipoLlamada === "Creando") {
+        endpoint = "http://localhost:3000/register";
+        metodo = "POST";
+        mensaje = "se añadió correctamente";
+      } else if (tipoLlamada === "Editando") {
+        endpoint = `http://localhost:3000/users/${userTemporal.id}`;
+        metodo = "PUT";
+        mensaje = "se modificó correctamente";
       }
 
-      if (tipoLlamada === "Editar") {
-        await fetch(`http://localhost:3000/users/${userTemporal.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datosEnviar),
-        });
-        getUserList();
-        setUserTemporal({
-          id: "",
-          name: "",
-          email: "",
-          role: "",
-          creando: false,
-          editando: false,
-        });
-        alert(
-          `${datosEnviar.role} ${datosEnviar.name} modificado correctamente`
-        );
-      }
+      await fetch(endpoint, {
+        method: metodo,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datosEnviar),
+      });
+      getUsersList();
+      setUserTemporal({
+        id: "",
+        name: "",
+        email: "",
+        role: "",
+        creando: false,
+        editando: false,
+      });
+      alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={submitHandler} noValidate>
       <div>
         <label>Nombre: </label>
         <input
           type="text"
           name="name"
           value={formData.name}
-          onChange={handleChange}
+          onChange={changeHandler}
           ref={nameRef}
         />
         {errores.name && <p style={{ color: "red" }}>{errores.name}</p>}
@@ -136,7 +120,7 @@ const UserForm = ({
           type="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
+          onChange={changeHandler}
           ref={emailRef}
         />
         {errores.email && <p style={{ color: "red" }}>{errores.email}</p>}
@@ -148,7 +132,7 @@ const UserForm = ({
           type="password"
           name="password"
           value={formData.password}
-          onChange={handleChange}
+          onChange={changeHandler}
           ref={passwordRef}
         />
         {errores.password && <p style={{ color: "red" }}>{errores.password}</p>}
@@ -160,7 +144,7 @@ const UserForm = ({
           id="custom-switch"
           label="¿Es administrador?"
           checked={formData.role}
-          onChange={handleCheck}
+          onChange={checkHandler}
           name="role"
           value={formData.role}
           ref={checkRef}
