@@ -20,13 +20,13 @@ export const getWordList = async (req, res) => {
 export const DeleteWord = async (req, res) => {
   const { id } = req.params;
   await Word.destroy({ where: { id } });
-  res.send(`Borrando palabra con ${id}`);
+  res.json({ message: `Palabra con id ${id} borrada exitosamente` });
 };
 
 export const EditExistingWord = async (req, res) => {
   const { id } = req.params;
   await Word.update(req.body, { where: { id } });
-  res.send(`Editando palabra con ${id}`);
+  res.json({ message: `Palabra con id ${id} editada exitosamente` });
 };
 
 export const importarPalabras = async () => {

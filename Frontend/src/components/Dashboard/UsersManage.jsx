@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Icon from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 
 import UsersForm from "./UsersForm";
 
@@ -13,12 +14,38 @@ const UsersManage = () => {
     creando: false,
     editando: false,
   });
+  const navigate = useNavigate();
 
   const getUsersList = async () => {
-    await fetch("http://localhost:3000/users")
-      .then((response) => response.json())
-      .then((data) => setUserList(data))
-      .catch((error) => console.log(error));
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No token found. Redirecting to login.");
+      navigate("/iniciar_sesion");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          console.error("Token invalid or expired. Redirecting to login.");
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          navigate("/iniciar_sesion");
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUserList(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      // Podrías establecer un estado de error aquí para mostrar en la UI
+    }
   };
 
   useEffect(() => {
@@ -48,13 +75,36 @@ const UsersManage = () => {
   };
 
   const deleteHandler = async (id) => {
-    await fetch(`http://localhost:3000/users/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
-    await getUsersList();
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No token found. Redirecting to login.");
+      navigate("/iniciar_sesion");
+      return;
+    }
+
+    if (window.confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+      try {
+        const response = await fetch(`http://localhost:3000/users/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            console.error("Token invalid or expired. Redirecting to login.");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
+            navigate("/iniciar_sesion");
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        await getUsersList(); // Recargar la lista después de borrar
+      } catch (error) {
+        console.error("Error deleting user:", error);
+      }
+    }
   };
 
   return (
@@ -77,17 +127,17 @@ const UsersManage = () => {
             </button>
           </li>
         ))}
-
-        {userTemporal.creando || userTemporal.editando ? (
-          <div>
-            <UsersForm
-              userTemporal={userTemporal}
-              setUserTemporal={setUserTemporal}
-              getUsersList={getUsersList}
-            />
-          </div>
-        ) : null}
       </ul>
+
+      {userTemporal.creando || userTemporal.editando ? (
+        <div>
+          <UsersForm
+            userTemporal={userTemporal}
+            setUserTemporal={setUserTemporal}
+            getUsersList={getUsersList}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

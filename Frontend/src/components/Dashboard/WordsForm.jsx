@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
+import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 
 import WordsValidations from "../WordsValidations";
@@ -17,6 +18,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
 
   const valueRef = useRef(null);
   const luckRef = useRef(null);
+  const navigate = useNavigate();
 
   const tipoLlamada = wordTemporal.creando ? "Creando" : "Editando";
 
@@ -89,17 +91,55 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         metodo = "PUT";
         mensaje = "se modificó correctamente";
       }
+      
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No token found. Redirecting to login.");
+        navigate("/iniciar_sesion");
+        return;
+      }
+      console.log(`[WordsForm - ${tipoLlamada}] Enviando token:`, token);
 
-      await fetch(endpoint, {
-        method: metodo,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      await getWordsList();
-      alert(`La palabra ${formData.value} ${mensaje}`);
-      onSaveSuccess();
+      try {
+        const response = await fetch(endpoint, {
+          method: metodo,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            console.error("Token invalid or expired. Redirecting to login.");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
+            navigate("/iniciar_sesion");
+            return;
+          }
+          const errorData = await response.json();
+          throw new Error(
+            errorData.message || `HTTP error! status: ${response.status}`
+          );
+        }
+
+        await getWordsList();
+        setWordTemporal({
+          id: "",
+          value: "",
+          luck: "",
+          creando: false,
+          editando: false,
+        });
+        alert(`La palabra ${formData.value} ${mensaje}`);
+        onSaveSuccess();
+      } catch (error) {
+        console.error(`Error ${tipoLlamada.toLowerCase()} word:`, error);
+        alert(
+          `Error al ${tipoLlamada.toLowerCase()} palabra: ${error.message}`
+        );
+      }
     }
   };
 

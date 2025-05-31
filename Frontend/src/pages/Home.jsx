@@ -23,7 +23,7 @@ const Home = () => {
           Iniciar sesión
         </button>
 
-        <p>
+        {/* <p>
           <br />
           <br />
           <br />
@@ -35,7 +35,7 @@ const Home = () => {
           }}
         >
           🛠️
-        </button>
+        </button> */}
       </div>
     </>
   );

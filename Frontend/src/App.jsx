@@ -11,9 +11,12 @@ import Wordle from "./pages/Wordle";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import UserProtected from "./components/UserProtected";
+
 import Modales from "./styles/Modales";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import AdminProtected from "./components/AdminProtected";
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(false);
@@ -23,8 +26,14 @@ function App() {
         <Routes>
           <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
-          <Route path="modales" element={<Modales />} />
-          <Route path="/admin_dashboard/*" element={<AdminDashboard />} />
+          <Route
+            path="/admin_dashboard/*"
+            element={
+              <AdminProtected>
+                <AdminDashboard />
+              </AdminProtected>
+            }
+          />
           <Route
             path="/registrarse"
             element={<Register setIsLoggedIn={setUsuarioLogueado} />}
