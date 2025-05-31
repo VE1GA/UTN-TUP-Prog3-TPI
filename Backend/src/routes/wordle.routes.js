@@ -17,7 +17,7 @@ router.delete("/users/:id", verifyToken, users.DeleteUser);
 router.put("/users/:id", verifyToken, users.EditExistingUser);
 
 // Endpoints del banco de palabras
-router.post("/words", verifyToken, words.createNewWord); // Ruta corregida y protegida
+router.post("/words", verifyToken, words.createNewWord);
 router.get("/words", verifyToken, words.getWordList);
 router.delete("/words/:id", verifyToken, words.DeleteWord);
 router.put("/words/:id", verifyToken, words.EditExistingWord);

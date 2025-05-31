@@ -32,7 +32,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
     <div className="register-form body">
       <div className="container">
         <h1>Wordle</h1>
-        <img src="../../public/registro.png" alt="" />
+        <img src="registro.png" alt="" />
 
         <h4>Registro</h4>
         <form onSubmit={handleSubmit} noValidate>

@@ -30,25 +30,9 @@ body,
   margin-top: 30px;
 }
 
-.admin-dashboard .word {
-  list-style-type: none;
-  padding: 0;
-  max-width: 500px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-}
-
-.admin-dashboard .user {
-  list-style-type: none;
-  padding: 0;
-  max-width: 1000px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-}
-
 .admin-dashboard li {
   margin: 5px 0;
-  background: #f8f9fa;
+  background: #a0a0c3;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -57,19 +41,6 @@ body,
   flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
-}
-
-.admin-dashboard .edit-button,
-.admin-dashboard .delete-button {
-  border: none;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  background-color: transparent;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-left: 10px;
-  transition: transform 0.2s;
 }
 
 .admin-dashboard .botonesCrear {
@@ -109,6 +80,45 @@ body,
   text-align: center;
 }
 
+.admin-dashboard .iconos-elemento {
+  white-space: nowrap;
+}
+
+.admin-dashboard .delete-button {
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 4px;
+  transition: transform 0.2s;
+}
+
+.admin-dashboard .edit-button {
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 10px;
+  transition: transform 0.2s;
+}
+
+.admin-dashboard .admin-icon {
+  border: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 50px;
+  transition: transform 0.2s;
+}
+
 .admin-dashboard .head {
   display: flex;
   flex-direction: column;
@@ -121,39 +131,66 @@ body,
   color: white;
 }
 
-.admin-dashboard .word {
+.admin-dashboard .user {
+  list-style-type: none;
+
+  font-family: Arial, sans-serif;
+
+  max-width: 1000px;
   max-height: 550px;
+
   overflow-y: auto;
   overflow-x: hidden;
+
   padding: 20px;
   margin: 15px 0;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(44, 44, 44);
   border-radius: 4px;
-  background-color: white;
+
+  background-color: #1e1e2f;
 }
 
-.admin-dashboard .word li {
+.admin-dashboard .user li {
   padding: 15px;
-  border-bottom: 1px solid #eee;
+  border: 1px solid rgb(44, 44, 44);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.admin-dashboard .user {
-  max-height: 550px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 20px;
-  margin: 15px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
+.admin-dashboard .user .info-elemento {
+  font-style: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  flex-grow: 1;
+  min-width: 0;
 }
 
-.admin-dashboard .user li {
+.admin-dashboard .word {
+  list-style-type: none;
+
+  font-family: Arial, sans-serif;
+
+  min-width: 380px;
+  max-width: 500px;
+  max-height: 400px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 20px;
+  margin: 15px 0;
+  border: 1px solid rgb(44, 44, 44);
+  border-radius: 4px;
+
+  background-color: #1e1e2f;
+}
+
+.admin-dashboard .word li {
   padding: 15px;
-  border-bottom: 1px solid #eee;
+  border: 1px solid rgb(44, 44, 44);
   display: flex;
   justify-content: space-between;
   align-items: center;

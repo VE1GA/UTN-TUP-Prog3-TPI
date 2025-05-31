@@ -55,23 +55,21 @@ export const loginUser = async (req, res) => {
 export const crearAdminInicial = async () => {
   const email = "pedritopascal@gmail.com";
 
-  try {
-    const existe = await User.findOne({ where: { email: email } });
+  const existe = await User.findOne({ where: { email: email } });
 
-    if (!existe) {
-      console.log("El administrador principal no existe. Creándolo...");
+  if (!existe) {
+    console.log("[INFO] El administrador inicial no existe. Creándolo...");
 
-      await User.create({
-        name: "Pedrito Pascal",
-        email: email,
-        password: "admin123",
-        role: "ADMIN",
-      });
-      console.log("Administrador principal creado.");
-    } else {
-      console.log("El administrador principal ya existe.");
-    }
-  } catch (error) {
-    console.error("Error al crear el administrador inicial:", error);
+    await User.create({
+      name: "Pedrito Pascal",
+      email: email,
+      password: "admin123",
+      role: "ADMIN",
+    });
+    console.log("[INFO] Administrador inicial creado correctamente.");
+  } else {
+    console.log(
+      "[INFO] El administrador principal ya existe. No es necesario crearlo."
+    );
   }
 };
