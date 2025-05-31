@@ -5,7 +5,7 @@ import * as Icon from "react-bootstrap-icons";
 
 import Validations from "../Auth/RegisterValidations";
 
-const UserForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
+const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -168,4 +168,4 @@ const UserForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   );
 };
 
-export default UserForm;
+export default UsersForm;
