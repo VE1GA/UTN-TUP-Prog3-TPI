@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/Auth/LoginForm";
 import ValidationsLogin from "../components/Auth/LoginValidations";
 
+import "../styles/Login.css";
+
 const Login = ({ setIsLoggedIn }) => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -16,10 +18,6 @@ const Login = ({ setIsLoggedIn }) => {
     } else {
       navigate("/play");
     }
-  };
-
-  const volverAlInicio = () => {
-    navigate("/");
   };
 
   const [errores, setErrores] = useState({});
@@ -72,14 +70,11 @@ const Login = ({ setIsLoggedIn }) => {
   return (
     <>
       <div>
-        <h1>Login</h1>
         <LoginForm
           onSubmit={manejarEnvio}
           errores={errores}
           refs={{ emailRef, passwordRef }}
         />
-
-        <button onClick={volverAlInicio}>Volver al inicio</button>
       </div>
     </>
   );

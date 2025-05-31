@@ -26,33 +26,33 @@ const AdminDashboard = () => {
       navigate("/iniciar_sesion"); // Si hay error parseando el usuario
     }
   }, [navigate]);
+
   return (
-    <div className="container">
-      <h1 className="title">Dashboard Admin</h1>
+    <div className="admin-dashboard">
+      <div className="container">
+        <h1 className="title">Dashboard Admin</h1>
+        <div className="dosbotones">
+          <button
+            className="botones"
+            onClick={() => navigate("/admin_dashboard/administrar_usuarios")}
+          >
+            Administrar cuentas de usuario
+          </button>
+          <button
+            className="botones"
+            onClick={() => navigate("/admin_dashboard/administrar_palabras")}
+          >
+            Administrar palabras
+          </button>
+        </div>
 
-      <div className="dosbotones">
-        <button
-          className="botones"
-          onClick={() => navigate("/admin_dashboard/administrar_usuarios")}
-        >
-          Administrar cuentas de usuario
-        </button>
-        <button
-          className="botones"
-          onClick={() => navigate("/admin_dashboard/administrar_palabras")}
-        >
-          Administrar palabras
-        </button>
+        <Routes>
+          <Route path="administrar_usuarios" element={<UsersManage />} />
+          <Route path="administrar_palabras" element={<WordsManage />} />
+        </Routes>
       </div>
-
-      <Routes>
-        <Route path="administrar_usuarios" element={<UsersManage />} />
-        <Route path="administrar_palabras" element={<WordsManage />} />
-      </Routes>
     </div>
   );
 };
 
 export default AdminDashboard;
-
-// Botones de borrar/agregar palabras y usuarios.
