@@ -127,27 +127,17 @@ const UsersManage = () => {
             </button>
           </li>
         ))}
-        {userTemporal.creando ? (
-          <div>
-            <UsersForm
-              tipoLlamada={"Crear"}
-              userTemporal={{}}
-              setUserTemporal={setUserTemporal}
-              getUsersList={getUsersList}
-            />
-          </div>
-        ) : null}
-
-        {userTemporal.creando || userTemporal.editando ? (
-          <div>
-            <UsersForm
-              userTemporal={userTemporal}
-              setUserTemporal={setUserTemporal}
-              getUsersList={getUsersList}
-            />
-          </div>
-        ) : null}
       </ul>
+
+      {userTemporal.creando || userTemporal.editando ? (
+        <div>
+          <UsersForm
+            userTemporal={userTemporal}
+            setUserTemporal={setUserTemporal}
+            getUsersList={getUsersList}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
