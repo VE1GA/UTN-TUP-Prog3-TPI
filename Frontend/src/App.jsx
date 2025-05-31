@@ -12,7 +12,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import UserProtected from "./components/UserProtected";
 
-import Modales from "./styles/Modales";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

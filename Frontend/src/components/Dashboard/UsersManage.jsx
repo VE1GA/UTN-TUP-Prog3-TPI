@@ -109,25 +109,37 @@ const UsersManage = () => {
 
   return (
     <div>
-      <button onClick={createHandler}>Crear usuario</button>
+      <div className="head">
+        <h2>Lista de usuarios</h2>
+        <button className="botonesCrear" onClick={createHandler}>
+          Crear usuario
+        </button>
 
-      <ul>
-        {userList.map((user) => (
-          <li key={user.id}>
-            {user.name} - {user.email} - {user.role} -{" "}
-            <button onClick={() => editHandler(user)}>
-              <Icon.PencilFill color="#EBAE2D" />
-            </button>
-            <button
-              onClick={() => {
-                deleteHandler(user.id);
-              }}
-            >
-              <Icon.Trash3Fill color="#FF3333" />
-            </button>
-          </li>
-        ))}
-      </ul>
+        <ul className="user">
+          {userList.map((user) => (
+            <li key={user.id}>
+              Name: "{user.name}" || Email: "{user.email}" || Role: "{user.role}
+              "{" "}
+              <div>
+                <button
+                  className="edit-button"
+                  onClick={() => editHandler(user)}
+                >
+                  <Icon.PencilFill color="#EBAE2D" />
+                </button>
+                <button
+                  className="delete-button"
+                  onClick={() => {
+                    deleteHandler(user.id);
+                  }}
+                >
+                  <Icon.Trash3Fill color="#FF3333" />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {userTemporal.creando || userTemporal.editando ? (
         <div>
