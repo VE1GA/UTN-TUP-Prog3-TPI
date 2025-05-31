@@ -16,7 +16,7 @@ router.delete("/users/:id", users.DeleteUser);
 router.put("/users/:id", users.EditExistingUser);
 
 // Endpoints del banco de palabras
-router.post("/words/:id", words.createNewWord);
+router.post("/words/", words.createNewWord);
 router.get("/words", words.getWordList);
 router.delete("/words/:id", words.DeleteWord);
 router.put("/words/:id", words.EditExistingWord);

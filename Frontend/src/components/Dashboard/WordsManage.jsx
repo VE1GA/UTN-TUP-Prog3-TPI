@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as Icon from "react-bootstrap-icons";
 
 import WordsForm from "./WordsForm";
+import Modal from "../../styles/Modal";
 
 const ManageWords = () => {
   const [wordList, setWordList] = useState([]);
@@ -12,6 +13,7 @@ const ManageWords = () => {
     creando: false,
     editando: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getWordsList = async () => {
     await fetch("http://localhost:3000/words")
@@ -24,6 +26,21 @@ const ManageWords = () => {
     getWordsList();
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setWordTemporal({
+      id: "",
+      value: "",
+      luck: "",
+      creando: false,
+      editando: false,
+    });
+  };
+
   const createHandler = () => {
     setWordTemporal({
       id: "",
@@ -32,6 +49,7 @@ const ManageWords = () => {
       creando: true,
       editando: false,
     });
+    openModal();
   };
 
   const editHandler = (word) => {
@@ -42,6 +60,7 @@ const ManageWords = () => {
       creando: false,
       editando: true,
     });
+    openModal();
   };
 
   const deleteHandler = async (id) => {
@@ -75,15 +94,14 @@ const ManageWords = () => {
           </li>
         ))}
 
-        {wordTemporal.creando || wordTemporal.editando ? (
-          <div>
-            <WordsForm
-              wordTemporal={wordTemporal}
-              setWordTemporal={setWordTemporal}
-              getWordsList={getWordsList}
-            />
-          </div>
-        ) : null}
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <WordsForm
+            wordTemporal={wordTemporal}
+            getWordsList={getWordsList}
+            onSaveSuccess={closeModal}
+            onCancel={closeModal}
+          />
+        </Modal>
       </ul>
     </div>
   );

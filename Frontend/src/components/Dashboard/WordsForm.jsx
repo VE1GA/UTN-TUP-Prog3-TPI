@@ -4,7 +4,10 @@ import * as Icon from "react-bootstrap-icons";
 
 import WordsValidations from "../WordsValidations";
 
-const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
   // Declaraciones
   const [formData, setFormData] = useState({
     value: "",
@@ -42,12 +45,35 @@ const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
     e.preventDefault();
 
     const errores = WordsValidations(formData);
-
     if (Object.keys(errores).length > 0) {
       if (errores.value && valueRef.current) {
         valueRef.current.focus();
+        toast.error(errores.value, {
+          toastId: "valueError",
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
       } else if (errores.luck && luckRef.current) {
         luckRef.current.focus();
+        toast.error(errores.luck, {
+          toastId: "luckError",
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
       }
 
       setErrores(errores);
@@ -72,13 +98,8 @@ const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
         body: JSON.stringify(formData),
       });
       await getWordsList();
-      setWordTemporal({
-        id: "",
-        value: "",
-        creando: false,
-        editando: false,
-      });
       alert(`La palabra ${formData.value} ${mensaje}`);
+      onSaveSuccess();
     }
   };
 
@@ -93,7 +114,6 @@ const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
           onChange={changeHandler}
           ref={valueRef}
         />
-        {errores.value && <p style={{ color: "red" }}>{errores.value}</p>}
       </div>
 
       <div>
@@ -105,21 +125,14 @@ const WordsForm = ({ wordTemporal, setWordTemporal, getWordsList }) => {
           onChange={changeHandler}
           ref={luckRef}
         />
-        {errores.luck && <p style={{ color: "red" }}>{errores.luck}</p>}
       </div>
 
       <button type="submit">
         <Icon.CheckCircleFill color="#0FC41A" size={20} />
       </button>
-      <button
-        onClick={() =>
-          setWordTemporal({
-            ...wordTemporal,
-            editando: false,
-            creando: false,
-          })
-        }
-      >
+      <button type="button" onClick={onCancel}>
+        {" "}
+        {}
         <Icon.XCircleFill color="#FF3333" size={20} />
       </button>
     </form>
