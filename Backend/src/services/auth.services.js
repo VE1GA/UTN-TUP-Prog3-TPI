@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+import { JWT_SECRET } from "../config.js";
 import { User } from "../models/User.js";
 
 export const registerUser = async (req, res) => {
@@ -19,18 +21,33 @@ export const loginUser = async (req, res) => {
 
   const enteredUser = await User.findOne({ where: { email } });
   if (!enteredUser) {
-    return res.status(401).send({ message: "Usuario no existente" });
+    return res.status(401).json({ message: "Usuario no existente" });
   }
 
   const passwordCheck = await bcrypt.compare(password, enteredUser.password);
   if (!passwordCheck) {
-    return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
+    return res.status(401).json({ message: "Email y/o contraseña incorrecta" });
   }
 
-  res.status(200).json({
+  // Generar JWT
+  const tokenPayload = {
     id: enteredUser.id,
     email: enteredUser.email,
+    role: enteredUser.role,
+  };
+
+  const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "1h" }); // El token expira en 1 hora
+  console.log("[Auth Service] Token generado:", token); // Log del token generado
+
+  res.status(200).json({
     message: "Logueado exitosamente",
+    token: token,
+    user: {
+      id: enteredUser.id,
+      email: enteredUser.email,
+      name: enteredUser.name,
+      role: enteredUser.role,
+    },
   });
 };
 

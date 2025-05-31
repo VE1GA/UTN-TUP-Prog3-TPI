@@ -10,8 +10,12 @@ const Login = ({ setIsLoggedIn }) => {
 
   const navigate = useNavigate();
 
-  const terminarLogueo = () => {
-    navigate("/play");
+  const terminarLogueo = (userRole) => {
+    if (userRole === "ADMIN") {
+      navigate("/admin_dashboard");
+    } else {
+      navigate("/play");
+    }
   };
 
   const volverAlInicio = () => {
@@ -43,13 +47,21 @@ const Login = ({ setIsLoggedIn }) => {
         .then((res) => res.json())
 
         .then((data) => {
-          console.log("Usuario logueado:", data);
-          alert(data.message || "Usuario logueado con éxito");
-          if (
-            data.message != "Usuario no existente" &&
-            data.message != "Email y/o contraseña incorrecta"
-          ) {
-            setTimeout(terminarLogueo, 1500);
+          if (data.token && data.user) {
+            console.log("[Login Page] Token recibido del backend:", data.token);
+            console.log("Usuario logueado:", data);
+            localStorage.setItem("authToken", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            setIsLoggedIn(true);
+            alert(data.message || "Usuario logueado con éxito");
+            // Redirigir después de un breve retraso
+            setTimeout(() => terminarLogueo(data.user.role), 1000);
+          } else {
+            // Manejar errores de login (ej. credenciales incorrectas)
+            console.error("Error de login:", data.message);
+            alert(data.message || "Error al iniciar sesión");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
             setIsLoggedIn(true);
           }
         })
