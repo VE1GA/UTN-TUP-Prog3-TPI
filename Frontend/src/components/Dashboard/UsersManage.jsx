@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import * as Icon from "react-bootstrap-icons";
 
-import UserForm from "./UserForm";
+import UsersForm from "./UsersForm";
 
-const ManageUsers = () => {
+const UsersManage = () => {
   const [userList, setUserList] = useState([]);
   const [userTemporal, setUserTemporal] = useState({
     id: "",
@@ -14,7 +14,7 @@ const ManageUsers = () => {
     editando: false,
   });
 
-  const getUserList = async () => {
+  const getUsersList = async () => {
     await fetch("http://localhost:3000/users")
       .then((response) => response.json())
       .then((data) => setUserList(data))
@@ -22,20 +22,21 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
-    getUserList();
+    getUsersList();
   }, []);
 
-  const handleDelete = async (id) => {
-    fetch(`http://localhost:3000/users/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
-    await getUserList();
+  const createHandler = () => {
+    setUserTemporal({
+      id: "",
+      name: "",
+      email: "",
+      role: "",
+      creando: true,
+      editando: false,
+    });
   };
 
-  const handleEdit = (user) => {
+  const editHandler = (user) => {
     setUserTemporal({
       id: user.id,
       name: user.name,
@@ -46,24 +47,30 @@ const ManageUsers = () => {
     });
   };
 
-  const handleCreate = () => {
-    setUserTemporal({ ...userTemporal, creando: true, editando: false });
+  const deleteHandler = async (id) => {
+    await fetch(`http://localhost:3000/users/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+    await getUsersList();
   };
 
   return (
     <div>
-      <button onClick={handleCreate}>Crear usuario</button>
+      <button onClick={createHandler}>Crear usuario</button>
 
       <ul>
         {userList.map((user) => (
           <li key={user.id}>
             {user.name} - {user.email} - {user.role} -{" "}
-            <button onClick={() => handleEdit(user)}>
+            <button onClick={() => editHandler(user)}>
               <Icon.PencilFill color="#EBAE2D" />
             </button>
             <button
               onClick={() => {
-                handleDelete(user.id);
+                deleteHandler(user.id);
               }}
             >
               <Icon.Trash3Fill color="#FF3333" />
@@ -72,22 +79,21 @@ const ManageUsers = () => {
         ))}
         {userTemporal.creando ? (
           <div>
-            <UserForm
+            <UsersForm
               tipoLlamada={"Crear"}
               userTemporal={{}}
               setUserTemporal={setUserTemporal}
-              getUserList={getUserList}
+              getUsersList={getUsersList}
             />
           </div>
         ) : null}
 
-        {userTemporal.editando ? (
+        {userTemporal.creando || userTemporal.editando ? (
           <div>
-            <UserForm
-              tipoLlamada={"Editar"}
+            <UsersForm
               userTemporal={userTemporal}
               setUserTemporal={setUserTemporal}
-              getUserList={getUserList}
+              getUsersList={getUsersList}
             />
           </div>
         ) : null}
@@ -96,4 +102,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default UsersManage;
