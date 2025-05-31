@@ -73,6 +73,7 @@ nav h1 {
   /* Remove flex-grow here to prevent vertical stretching of rows if board is tall */
   gap: 6px; /* Espacio entre casillas */
   width: 100%; /* Asegura que la fila ocupe el ancho completo disponible */
+  margin-left: 0.1px;
 }
 
 .letter {

@@ -53,12 +53,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         toast.error(errores.value, {
           toastId: "valueError",
           position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          autoClose: 2000,
           theme: "dark",
           transition: Slide,
         });
@@ -67,12 +62,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         toast.error(errores.luck, {
           toastId: "luckError",
           position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          autoClose: 2000,
           theme: "dark",
           transition: Slide,
         });
@@ -91,7 +81,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         metodo = "PUT";
         mensaje = "se modificó correctamente";
       }
-      
+
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No token found. Redirecting to login.");
@@ -125,14 +115,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         }
 
         await getWordsList();
-        setWordTemporal({
-          id: "",
-          value: "",
-          luck: "",
-          creando: false,
-          editando: false,
-        });
-        alert(`La palabra ${formData.value} ${mensaje}`);
+        // alert(`La palabra ${formData.value} ${mensaje}`);
         onSaveSuccess();
       } catch (error) {
         console.error(`Error ${tipoLlamada.toLowerCase()} word:`, error);
