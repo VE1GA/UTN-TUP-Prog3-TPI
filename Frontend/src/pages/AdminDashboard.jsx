@@ -30,7 +30,7 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <div className="container">
-        <h1 className="title">Dashboard Admin</h1>
+        <h1 className="title">Dashboard de administrador</h1>
         <div className="dosbotones">
           <button
             className="botones"
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
             className="botones"
             onClick={() => navigate("/admin_dashboard/administrar_palabras")}
           >
-            Administrar palabras
+            Administrar banco de palabras
           </button>
         </div>
 

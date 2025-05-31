@@ -130,14 +130,14 @@ const ManageWords = () => {
   return (
     <div>
       <div className="head">
-        <h2>Lista de palabras</h2>
+        <h2>Banco de palabras ({wordList.length})</h2>
         <button className="botonesCrear" onClick={createHandler}>
-          Crear palabras
+          Añadir una nueva palabra
         </button>
         <ul className="word">
           {wordList.map((word) => (
             <li key={word.id}>
-              Word: "{word.value}" || Lucky: "{word.luck}"{" "}
+              {word.value} (Probabilidad: {word.luck})
               <div>
                 <button
                   className="edit-button"

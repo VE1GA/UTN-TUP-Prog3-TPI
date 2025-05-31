@@ -1,8 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import "./styles/App.css";
 
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -11,10 +13,6 @@ import Wordle from "./pages/Wordle";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import UserProtected from "./components/UserProtected";
-
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import AdminProtected from "./components/AdminProtected";
 
 function App() {

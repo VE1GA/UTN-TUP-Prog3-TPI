@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 
+import { getToken, checkToken } from "../../services/Token.services";
+
 import Validations from "../Auth/RegisterValidations";
 
 const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
@@ -26,6 +28,8 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   let endpoint;
   let metodo;
   let mensaje;
+
+  let token;
 
   useEffect(() => {
     setFormData({
@@ -80,64 +84,30 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
         endpoint = `http://localhost:3000/users/${userTemporal.id}`;
         metodo = "PUT";
         mensaje = "se modificó correctamente";
+        token = getToken(navigate);
       }
 
-      const headers = {
-        "Content-Type": "application/json",
-      };
+      const response = await fetch(endpoint, {
+        method: metodo,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(datosEnviar),
+      });
 
-      if (tipoLlamada === "Editando") {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No token found for editing. Redirecting to login.");
-          navigate("/iniciar_sesion");
-          return;
-        }
-        console.log("[UsersForm - Editando] Enviando token:", token);
-        headers["Authorization"] = `Bearer ${token}`;
-      }
+      checkToken(response, navigate);
+      getUsersList();
 
-      try {
-        const response = await fetch(endpoint, {
-          method: metodo,
-          headers: headers,
-          body: JSON.stringify(datosEnviar),
-        });
-
-        if (!response.ok) {
-          // Si es un error de token en la edición
-          if (
-            tipoLlamada === "Editando" &&
-            (response.status === 401 || response.status === 403)
-          ) {
-            console.error("Token invalid or expired. Redirecting to login.");
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
-            navigate("/iniciar_sesion");
-            return;
-          }
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || `HTTP error! status: ${response.status}`
-          );
-        }
-
-        getUsersList();
-        setUserTemporal({
-          id: "",
-          name: "",
-          email: "",
-          role: "",
-          creando: false,
-          editando: false,
-        });
-        alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
-      } catch (error) {
-        console.error(`Error ${tipoLlamada.toLowerCase()} user:`, error);
-        alert(
-          `Error al ${tipoLlamada.toLowerCase()} usuario: ${error.message}`
-        );
-      }
+      setUserTemporal({
+        id: "",
+        name: "",
+        email: "",
+        role: "",
+        creando: false,
+        editando: false,
+      });
+      alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
     }
   };
 

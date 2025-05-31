@@ -14,10 +14,6 @@ const Register = ({ setIsLoggedIn }) => {
 
   const navigate = useNavigate();
 
-  const terminarRegistro = () => {
-    navigate("/play");
-  };
-
   const [errores, setErrores] = useState({});
 
   const manejarEnvio = (FormData) => {
@@ -54,7 +50,7 @@ const Register = ({ setIsLoggedIn }) => {
 
         .catch((error) => console.error("Ocurrió un error:", error));
 
-      setTimeout(terminarRegistro, 1500);
+      setTimeout(navigate("/play"), 1500);
       setIsLoggedIn(true);
     }
   };

@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 import Board from "../components/Game/Board";
 import Keyboard from "../components/Game/Keyboard";
-import { boardDefault, generateWordSet } from "../components/Game/Words";
+import { boardDefault, generateGameWords } from "../components/Game/Words";
 
 export const WordleContext = createContext();
 
@@ -10,7 +10,7 @@ const Wordle = () => {
   // Estados
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
-  const [wordSet, setWordSet] = useState(new Set());
+  const [wordBank, setWordBank] = useState(new Set());
   const [correctWord, setCorrectWord] = useState("");
   const [disabledLetters, setDisabledLetters] = useState([]);
   const [gameOver, setGameOver] = useState({
@@ -19,10 +19,10 @@ const Wordle = () => {
   });
 
   useEffect(() => {
-    generateWordSet().then((words) => {
-      setWordSet(words.wordSet);
-      console.log(words);
+    generateGameWords().then((words) => {
+      setWordBank(words.wordBank);
       setCorrectWord(words.todaysWord);
+      console.log(words);
     });
   }, []);
 
@@ -41,7 +41,7 @@ const Wordle = () => {
     for (let i = 0; i < 5; i++) {
       currWord += board[currAttempt.attempt][i];
     }
-    // if (wordSet.has(currWord.toLowerCase())) {
+    // if (wordBank.has(currWord.toLowerCase())) {
     setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 }); // Pasa al siguiente renglón
   };
 

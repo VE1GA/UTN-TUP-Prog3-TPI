@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import * as Icon from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+
+import * as Icon from "react-bootstrap-icons";
+
+import { getToken, checkToken } from "../../services/Token.services";
 
 import UsersForm from "./UsersForm";
 
@@ -17,35 +20,17 @@ const UsersManage = () => {
   const navigate = useNavigate();
 
   const getUsersList = async () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      console.error("No token found. Redirecting to login.");
-      navigate("/iniciar_sesion");
-      return;
-    }
+    const token = getToken(navigate);
 
-    try {
-      const response = await fetch("http://localhost:3000/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const response = await fetch("http://localhost:3000/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          console.error("Token invalid or expired. Redirecting to login.");
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("user");
-          navigate("/iniciar_sesion");
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setUserList(data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      // Podrías establecer un estado de error aquí para mostrar en la UI
-    }
+    checkToken(response, navigate);
+    const data = await response.json();
+    setUserList(data);
   };
 
   useEffect(() => {
@@ -75,52 +60,41 @@ const UsersManage = () => {
   };
 
   const deleteHandler = async (id) => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      console.error("No token found. Redirecting to login.");
-      navigate("/iniciar_sesion");
-      return;
-    }
+    const token = getToken(navigate);
 
     if (window.confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
-      try {
-        const response = await fetch(`http://localhost:3000/users/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await fetch(`http://localhost:3000/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            console.error("Token invalid or expired. Redirecting to login.");
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
-            navigate("/iniciar_sesion");
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        await getUsersList(); // Recargar la lista después de borrar
-      } catch (error) {
-        console.error("Error deleting user:", error);
-      }
+      checkToken(response, navigate);
+
+      await getUsersList(); // Recargar la lista después de borrar
     }
   };
 
   return (
     <div>
       <div className="head">
-        <h2>Lista de usuarios</h2>
+        <h2>Lista de usuarios ({userList.length})</h2>
         <button className="botonesCrear" onClick={createHandler}>
-          Crear usuario
+          Crear un nuevo usuario
         </button>
 
         <ul className="user">
           {userList.map((user) => (
             <li key={user.id}>
-              Name: "{user.name}" || Email: "{user.email}" || Role: "{user.role}
-              "{" "}
-              <div>
+              <div className="info-elemento">
+                {user.email} ({user.name})
+              </div>
+
+              <div className="iconos-elemento">
+                {user.role === "ADMIN" ? (
+                  <Icon.PersonFillGear className="admin-icon" color="#172EFF" />
+                ) : null}
                 <button
                   className="edit-button"
                   onClick={() => editHandler(user)}

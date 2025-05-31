@@ -6,7 +6,7 @@ import { sequelize } from "./db.js";
 import wordleRoutes from "./routes/wordle.routes.js";
 
 import { crearAdminInicial } from "./services/auth.services.js";
-import { importarPalabras } from "./services/words.services.js";
+import { importarPalabrasIniciales } from "./services/words.services.js";
 
 const app = express();
 
@@ -23,10 +23,10 @@ try {
   app.listen(PORT);
   app.use(wordleRoutes);
 
-  crearAdminInicial();
-  importarPalabras();
-
   await sequelize.sync();
+
+  await crearAdminInicial();
+  await importarPalabrasIniciales();
 
   console.log("server listening on port ", PORT);
 } catch (error) {

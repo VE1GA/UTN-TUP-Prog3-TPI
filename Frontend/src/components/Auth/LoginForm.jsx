@@ -29,7 +29,7 @@ const LoginForm = ({ onSubmit, errores, refs }) => {
     <div className="login-form body">
       <div className="container">
         <h1>Wordle</h1>
-        <img src="../../public/wordle.png" alt="" />
+        <img src="wordle.png" alt="" />
         <h4>Inicio de sesión</h4>
 
         <form onSubmit={handleSubmit} noValidate>
