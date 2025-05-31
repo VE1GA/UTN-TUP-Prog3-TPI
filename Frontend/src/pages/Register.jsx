@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import RegisterForm from "../components/Auth/RegisterForm";
 import Validations from "../components/Auth/RegisterValidations";
 
+import "../styles/Login.css";
+
 const Register = ({ setIsLoggedIn }) => {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
@@ -14,10 +16,6 @@ const Register = ({ setIsLoggedIn }) => {
 
   const terminarRegistro = () => {
     navigate("/play");
-  };
-
-  const volverAlInicio = () => {
-    navigate("/");
   };
 
   const [errores, setErrores] = useState({});
@@ -64,14 +62,11 @@ const Register = ({ setIsLoggedIn }) => {
   return (
     <>
       <div>
-        <h1>Registro</h1>
         <RegisterForm
           onSubmit={manejarEnvio}
           errores={errores}
           refs={{ nameRef, emailRef, passwordRef, confirmPasswordRef }}
         />
-
-        <button onClick={volverAlInicio}>Volver al inicio</button>
       </div>
     </>
   );

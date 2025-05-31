@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
+
+/* Aplica solo dentro de login-form o register-form que tengan también la clase body */
+.login-form.body,
+.register-form.body {
+  font-family: "Lato", sans-serif;
+  background-color: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)),
+    url("../../public/hacker-background-yf4qfm0zurappf4e.png");
+}
+
+.login-form.body .container,
+.register-form.body .container {
+  background: white;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.login-form.body .container img,
+.register-form.body .container img {
+  width: 75px;
+  height: 75px;
+}
+
+.login-form.body h1,
+.register-form.body h1 {
+  margin: 0 0 0.1em 0;
+  color: #333;
+  text-align: center;
+}
+
+.login-form.body form,
+.register-form.body form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.login-form.body label,
+.register-form.body label {
+  margin: 0.5em 0 0.2em;
+  text-align: left;
+  color: #555;
+  width: 100%;
+}
+
+.login-form.body input[type="email"],
+.login-form.body input[type="text"],
+.login-form.body input[type="password"],
+.register-form.body input[type="email"],
+.register-form.body input[type="text"],
+.register-form.body input[type="password"] {
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 1em;
+  font-size: 1em;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.login-form.body button,
+.register-form.body button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.7em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.login-form.body button:hover,
+.register-form.body button:hover {
+  background-color: #218838;
+}
+
+.login-form.body a,
+.register-form.body a {
+  color: #154add;
+  text-decoration: none;
+  margin-top: 1em;
+}
+
+.login-form.body a:hover,
+.register-form.body a:hover {
+  text-decoration: underline;
+}

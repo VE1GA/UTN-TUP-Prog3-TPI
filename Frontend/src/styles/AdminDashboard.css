@@ -1,14 +1,36 @@
-body {
-  background-color: black;
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
-.title {
+.admin-dashboard {
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-dashboard img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.admin-dashboard .title {
   text-align: center;
   color: white;
   margin-top: 30px;
 }
 
-.word {
+.admin-dashboard .word {
   list-style-type: none;
   padding: 0;
   max-width: 500px;
@@ -16,7 +38,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.user {
+.admin-dashboard .user {
   list-style-type: none;
   padding: 0;
   max-width: 1000px;
@@ -24,21 +46,21 @@ body {
   font-family: Arial, sans-serif;
 }
 
-li {
+.admin-dashboard li {
   margin: 5px 0;
   background: #f8f9fa;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-span {
+.admin-dashboard span {
   flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
 }
 
-.edit-button,
-.delete-button {
+.admin-dashboard .edit-button,
+.admin-dashboard .delete-button {
   border: none;
   cursor: pointer;
   width: 30px;
@@ -50,7 +72,7 @@ span {
   transition: transform 0.2s;
 }
 
-.botonesCrear {
+.admin-dashboard .botonesCrear {
   gap: 10px;
   max-width: 600px;
   margin: 20px;
@@ -64,7 +86,7 @@ span {
   transition: background-color 0.3s, transform 0.2s;
 }
 
-.botones {
+.admin-dashboard .botones {
   gap: 10px;
   width: 260px;
   height: 60px;
@@ -79,7 +101,7 @@ span {
   transition: background-color 0.3s, transform 0.2s;
 }
 
-.dosbotones {
+.admin-dashboard .dosbotones {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -87,7 +109,7 @@ span {
   text-align: center;
 }
 
-.head {
+.admin-dashboard .head {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,12 +117,12 @@ span {
   text-align: center;
 }
 
-.head h2 {
+.admin-dashboard .head h2 {
   color: white;
 }
 
-.word {
-  max-height: 400px;
+.admin-dashboard .word {
+  max-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px;
@@ -110,7 +132,7 @@ span {
   background-color: white;
 }
 
-.word li {
+.admin-dashboard .word li {
   padding: 15px;
   border-bottom: 1px solid #eee;
   display: flex;
@@ -118,8 +140,8 @@ span {
   align-items: center;
 }
 
-.user {
-  max-height: 400px;
+.admin-dashboard .user {
+  max-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px;
@@ -129,7 +151,7 @@ span {
   background-color: white;
 }
 
-.user li {
+.admin-dashboard .user li {
   padding: 15px;
   border-bottom: 1px solid #eee;
   display: flex;
