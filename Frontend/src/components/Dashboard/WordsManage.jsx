@@ -16,7 +16,7 @@ const ManageWords = () => {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const getWordsList = async () => {
@@ -129,34 +129,44 @@ const ManageWords = () => {
 
   return (
     <div>
-      <button onClick={createHandler}>Crear palabras</button>
+      <div className="head">
+        <h2>Lista de palabras</h2>
+        <button className="botonesCrear" onClick={createHandler}>
+          Crear palabras
+        </button>
+        <ul className="word">
+          {wordList.map((word) => (
+            <li key={word.id}>
+              Word: "{word.value}" || Lucky: "{word.luck}"{" "}
+              <div>
+                <button
+                  className="edit-button"
+                  onClick={() => editHandler(word)}
+                >
+                  <Icon.PencilFill color="#EBAE2D" />
+                </button>
+                <button
+                  className="delete-button"
+                  onClick={() => {
+                    deleteHandler(word.id);
+                  }}
+                >
+                  <Icon.Trash3Fill color="#FF3333" />
+                </button>
+              </div>
+            </li>
+          ))}
 
-      <ul>
-        {wordList.map((word) => (
-          <li key={word.id}>
-            {word.value} - {word.luck} -{" "}
-            <button onClick={() => editHandler(word)}>
-              <Icon.PencilFill color="#EBAE2D" />
-            </button>
-            <button
-              onClick={() => {
-                deleteHandler(word.id);
-              }}
-            >
-              <Icon.Trash3Fill color="#FF3333" />
-            </button>
-          </li>
-        ))}
-
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <WordsForm
-            wordTemporal={wordTemporal}
-            getWordsList={getWordsList}
-            onSaveSuccess={closeModal}
-            onCancel={closeModal}
-          />
-        </Modal>
-      </ul>
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <WordsForm
+              wordTemporal={wordTemporal}
+              getWordsList={getWordsList}
+              onSaveSuccess={closeModal}
+              onCancel={closeModal}
+            />
+          </Modal>
+        </ul>
+      </div>
     </div>
   );
 };
