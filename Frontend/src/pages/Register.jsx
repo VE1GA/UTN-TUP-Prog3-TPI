@@ -8,7 +8,7 @@ const Register = ({ setIsLoggedIn }) => {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const confirmpasswordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -32,8 +32,8 @@ const Register = ({ setIsLoggedIn }) => {
         emailRef.current.focus();
       } else if (errores.password && passwordRef.current) {
         passwordRef.current.focus();
-      } else if (errores.confirmpassword && confirmpasswordRef.current) {
-        confirmpasswordRef.current.focus();
+      } else if (errores.confirmpassword && confirmPasswordRef.current) {
+        confirmPasswordRef.current.focus();
       }
 
       setErrores(errores);
@@ -68,7 +68,7 @@ const Register = ({ setIsLoggedIn }) => {
         <RegisterForm
           onSubmit={manejarEnvio}
           errores={errores}
-          refs={{ nameRef, emailRef, passwordRef, confirmpasswordRef }}
+          refs={{ nameRef, emailRef, passwordRef, confirmPasswordRef }}
         />
 
         <button onClick={volverAlInicio}>Volver al inicio</button>

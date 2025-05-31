@@ -1,8 +1,15 @@
 import { Word } from "../models/Word.js";
 
-export const createNewWord = (req, res) => {
-  const { id } = req.params;
-  res.send(`Creando palabra con el ${id}`);
+export const createNewWord = async (req, res) => {
+  const { value, luck } = req.body;
+  const newWord = await Word.create({ value, luck });
+
+  res.status(201).json({
+    id: newWord.id,
+    value: newWord.value,
+    luck: newWord.luck,
+    message: "Palabra creada exitosamente",
+  });
 };
 
 export const getWordList = async (req, res) => {
@@ -10,17 +17,19 @@ export const getWordList = async (req, res) => {
   res.json(wordList);
 };
 
-export const DeleteWord = (req, res) => {
+export const DeleteWord = async (req, res) => {
   const { id } = req.params;
+  await Word.destroy({ where: { id } });
   res.send(`Borrando palabra con ${id}`);
 };
 
-export const EditExistingWord = (req, res) => {
+export const EditExistingWord = async (req, res) => {
   const { id } = req.params;
-  res.send(`Actualizando palabra con ${id}`);
+  await Word.update(req.body, { where: { id } });
+  res.send(`Editando palabra con ${id}`);
 };
 
-export const importarPalabras = () => {
+export const importarPalabras = async () => {
   const wordArray = [
     "papel",
     "perro",
@@ -36,14 +45,19 @@ export const importarPalabras = () => {
     "rawrr",
     "roulio",
   ];
+  try {
+    const count = await Word.count();
 
-  const count = Word.count();
-
-  if (count === 0) {
-    wordArray.forEach((element) => {
-      Word.create({ value: element });
-    });
-
-    console.log("Importando palabras iniciales al pool de palabras");
+    if (count === 0) {
+      console.log("Importando palabras iniciales al pool de palabras...");
+      for (const element of wordArray) {
+        await Word.create({ value: element });
+      }
+      console.log("Palabras iniciales importadas.");
+    } else {
+      console.log("Las palabras iniciales ya existen en la base de datos.");
+    }
+  } catch (error) {
+    console.error("Error al importar palabras:", error);
   }
 };

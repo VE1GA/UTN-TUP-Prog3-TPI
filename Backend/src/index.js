@@ -23,10 +23,10 @@ try {
   app.listen(PORT);
   app.use(wordleRoutes);
 
-  await sequelize.sync();
-
   crearAdminInicial();
   importarPalabras();
+
+  await sequelize.sync();
 
   console.log("server listening on port ", PORT);
 } catch (error) {
