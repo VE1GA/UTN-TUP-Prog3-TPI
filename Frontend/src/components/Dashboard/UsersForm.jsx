@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 
@@ -18,6 +19,7 @@ const UserForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const checkRef = useRef(null);
+  const navigate = useNavigate();
 
   const tipoLlamada = userTemporal.creando ? "Creando" : "Editando";
 
@@ -80,23 +82,62 @@ const UserForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
         mensaje = "se modificó correctamente";
       }
 
-      await fetch(endpoint, {
-        method: metodo,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datosEnviar),
-      });
-      getUsersList();
-      setUserTemporal({
-        id: "",
-        name: "",
-        email: "",
-        role: "",
-        creando: false,
-        editando: false,
-      });
-      alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      if (tipoLlamada === "Editando") {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No token found for editing. Redirecting to login.");
+          navigate("/iniciar_sesion");
+          return;
+        }
+        console.log("[UsersForm - Editando] Enviando token:", token);
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: metodo,
+          headers: headers,
+          body: JSON.stringify(datosEnviar),
+        });
+
+        if (!response.ok) {
+          // Si es un error de token en la edición
+          if (
+            tipoLlamada === "Editando" &&
+            (response.status === 401 || response.status === 403)
+          ) {
+            console.error("Token invalid or expired. Redirecting to login.");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
+            navigate("/iniciar_sesion");
+            return;
+          }
+          const errorData = await response.json();
+          throw new Error(
+            errorData.message || `HTTP error! status: ${response.status}`
+          );
+        }
+
+        getUsersList();
+        setUserTemporal({
+          id: "",
+          name: "",
+          email: "",
+          role: "",
+          creando: false,
+          editando: false,
+        });
+        alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
+      } catch (error) {
+        console.error(`Error ${tipoLlamada.toLowerCase()} user:`, error);
+        alert(
+          `Error al ${tipoLlamada.toLowerCase()} usuario: ${error.message}`
+        );
+      }
     }
   };
 

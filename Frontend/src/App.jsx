@@ -11,6 +11,7 @@ import Wordle from "./pages/Wordle";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import UserProtected from "./components/UserProtected";
+import AdminProtected from "./components/AdminProtected";
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(false);
@@ -20,7 +21,14 @@ function App() {
         <Routes>
           <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
-          <Route path="/admin_dashboard/*" element={<AdminDashboard />} />
+          <Route
+            path="/admin_dashboard/*"
+            element={
+              <AdminProtected>
+                <AdminDashboard />
+              </AdminProtected>
+            }
+          />
           <Route
             path="/registrarse"
             element={<Register setIsLoggedIn={setUsuarioLogueado} />}

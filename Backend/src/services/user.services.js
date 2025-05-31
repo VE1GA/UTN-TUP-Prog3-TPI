@@ -8,12 +8,12 @@ export const getUserList = async (req, res) => {
 export const DeleteUser = async (req, res) => {
   const { id } = req.params;
   await User.destroy({ where: { id } });
-  res.send(`Borrando usuario con ${id}`);
+  res.json({ message: `Usuario con id ${id} borrado exitosamente` });
 };
 
 export const EditExistingUser = async (req, res) => {
   const { id } = req.params;
   await hashPassword(req.body);
   await User.update(req.body, { where: { id } });
-  res.send(`Editando usuario con ${id}`);
+  res.json({ message: `Usuario con id ${id} editado exitosamente` });
 };
