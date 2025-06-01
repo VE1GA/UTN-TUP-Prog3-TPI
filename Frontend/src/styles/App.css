@@ -7,24 +7,22 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: column; /* Apila elementos verticalmente */
+  flex-direction: column;
   color: white;
-  overflow: hidden; /* Controla el desbordamiento general */
-  justify-content: flex-start; /* Alinea elementos al inicio del contenedor */
-  align-items: center; /* Centra el contenido horizontalmente */
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: center;
 }
-/* Estilos globales para que toda la app ocupe 100% sin overflow */
 
-/* Barra de navegación */
 nav {
-  height: 60px; /* Altura fija para la navegación */
+  height: 60px;
   width: 100%;
   border-bottom: 1px solid grey;
-  display: flex; /* Usamos flexbox para centrar el título */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  flex-shrink: 0; /* Asegura que la nav mantenga su altura */
-  padding: 0 10px; /* Pequeño padding horizontal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 10px;
   box-sizing: border-box;
 }
 
@@ -32,11 +30,10 @@ nav h1 {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
   color: white;
-  /* El tamaño de fuente para el título Wordle, se ajusta a la pantalla */
-  font-size: clamp(30px, 8vw, 45px); /* min:30px, ideal:8vw, max:45px */
+
+  font-size: clamp(30px, 8vw, 45px);
 }
 
-/* Contenedor principal del juego (tablero + teclado) */
 .game {
   width: 100%;
   flex-grow: 1; /* Permite que .game ocupe el espacio restante */
