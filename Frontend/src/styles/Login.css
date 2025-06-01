@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
 
-/* Aplica solo dentro de login-form o register-form que tengan también la clase body */
 .login-form.body,
 .register-form.body {
   font-family: "Lato", sans-serif;

@@ -8,8 +8,8 @@
   margin: 0;
   padding: 0 20px;
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   text-align: center;
   box-sizing: border-box;

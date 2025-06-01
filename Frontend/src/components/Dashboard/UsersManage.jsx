@@ -6,6 +6,7 @@ import * as Icon from "react-bootstrap-icons";
 import { getToken, checkToken } from "../../services/Token.services";
 
 import UsersForm from "./UsersForm";
+import Modal from "../../styles/Modal";
 
 const UsersManage = () => {
   const [userList, setUserList] = useState([]);
@@ -18,6 +19,8 @@ const UsersManage = () => {
     editando: false,
   });
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getUsersList = async () => {
     const token = getToken(navigate);
@@ -37,6 +40,22 @@ const UsersManage = () => {
     getUsersList();
   }, []);
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setUserTemporal({
+      id: "",
+      name: "",
+      email: "",
+      role: "",
+      creando: false,
+      editando: false,
+    });
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
   const createHandler = () => {
     setUserTemporal({
       id: "",
@@ -46,6 +65,7 @@ const UsersManage = () => {
       creando: true,
       editando: false,
     });
+    openModal();
   };
 
   const editHandler = (user) => {
@@ -57,6 +77,7 @@ const UsersManage = () => {
       creando: false,
       editando: true,
     });
+    openModal();
   };
 
   const deleteHandler = async (id) => {
@@ -115,15 +136,14 @@ const UsersManage = () => {
         </ul>
       </div>
 
-      {userTemporal.creando || userTemporal.editando ? (
-        <div>
-          <UsersForm
-            userTemporal={userTemporal}
-            setUserTemporal={setUserTemporal}
-            getUsersList={getUsersList}
-          />
-        </div>
-      ) : null}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <UsersForm
+          userTemporal={userTemporal}
+          getUsersList={getUsersList}
+          onSaveSuccess={closeModal}
+          onCancel={closeModal}
+        />
+      </Modal>
     </div>
   );
 };

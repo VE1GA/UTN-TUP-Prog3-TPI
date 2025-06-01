@@ -128,6 +128,8 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
 
   return (
     <form onSubmit={submitHandler} noValidate>
+      <h1> {wordTemporal.creando ? "Creando palabra" : "Editando palabra"} </h1>
+
       <div>
         <label>Valor: </label>
         <input
@@ -151,12 +153,12 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
       </div>
 
       <button type="submit">
-        <Icon.CheckCircleFill color="#0FC41A" size={20} />
+        <Icon.CheckCircleFill color="#0FC41A" size={40} />
       </button>
       <button type="button" onClick={onCancel}>
         {" "}
         {}
-        <Icon.XCircleFill color="#FF3333" size={20} />
+        <Icon.XCircleFill color="#FF3333" size={40} />
       </button>
     </form>
   );

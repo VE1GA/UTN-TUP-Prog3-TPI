@@ -8,7 +8,10 @@ import { getToken, checkToken } from "../../services/Token.services";
 
 import Validations from "../Auth/RegisterValidations";
 
-const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -61,10 +64,31 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {
         nameRef.current.focus();
+        toast.error(errores.name, {
+          toastId: "valueError",
+          position: "bottom-center",
+          autoClose: 2000,
+          theme: "dark",
+          transition: Slide,
+        });
       } else if (errores.email && emailRef.current) {
         emailRef.current.focus();
+        toast.error(errores.email, {
+          toastId: "valueError",
+          position: "bottom-center",
+          autoClose: 2000,
+          theme: "dark",
+          transition: Slide,
+        });
       } else if (errores.password && passwordRef.current) {
         passwordRef.current.focus();
+        toast.error(errores.password, {
+          toastId: "valueError",
+          position: "bottom-center",
+          autoClose: 2000,
+          theme: "dark",
+          transition: Slide,
+        });
       }
 
       setErrores(errores);
@@ -99,14 +123,7 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
       checkToken(response, navigate);
       getUsersList();
 
-      setUserTemporal({
-        id: "",
-        name: "",
-        email: "",
-        role: "",
-        creando: false,
-        editando: false,
-      });
+      onSaveSuccess();
       alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
     }
   };
@@ -114,6 +131,11 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
   return (
     <form onSubmit={submitHandler} noValidate>
       <div>
+        <h1>
+          {" "}
+          {userTemporal.creando ? "Creando usuario" : "Editando usuario"}{" "}
+        </h1>
+
         <label>Nombre: </label>
         <input
           type="text"
@@ -122,7 +144,6 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
           onChange={changeHandler}
           ref={nameRef}
         />
-        {errores.name && <p style={{ color: "red" }}>{errores.name}</p>}
       </div>
 
       <div>
@@ -134,7 +155,6 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
           onChange={changeHandler}
           ref={emailRef}
         />
-        {errores.email && <p style={{ color: "red" }}>{errores.email}</p>}
       </div>
 
       <div>
@@ -146,10 +166,9 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
           onChange={changeHandler}
           ref={passwordRef}
         />
-        {errores.password && <p style={{ color: "red" }}>{errores.password}</p>}
       </div>
 
-      <div>
+      <div className="switch-container">
         <Form.Check
           type="switch"
           id="custom-switch"
@@ -161,19 +180,14 @@ const UsersForm = ({ userTemporal, setUserTemporal, getUsersList }) => {
           ref={checkRef}
         />
       </div>
+
       <button type="submit">
-        <Icon.CheckCircleFill color="#0FC41A" size={20} />
+        <Icon.CheckCircleFill color="#0FC41A" size={40} />
       </button>
-      <button
-        onClick={() =>
-          setUserTemporal({
-            ...userTemporal,
-            editando: false,
-            creando: false,
-          })
-        }
-      >
-        <Icon.XCircleFill color="#FF3333" size={20} />
+      <button type="button" onClick={onCancel}>
+        {" "}
+        {}
+        <Icon.XCircleFill color="#FF3333" size={40} />
       </button>
     </form>
   );
