@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import WordsForm from "./WordsForm";
 import Modal from "../../styles/Modal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Importar el nuevo modal
+
+import { toast, Slide } from "react-toastify"; // Para notificaciones
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageWords = () => {
   const [wordList, setWordList] = useState([]);
@@ -15,9 +19,19 @@ const ManageWords = () => {
     editando: false,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
+  const [wordToDelete, setWordToDelete] = useState(null);
 
   const navigate = useNavigate();
+
+  const toastConfig = {
+    position: "bottom-center",
+    autoClose: 3000,
+    theme: "dark",
+    transition: Slide,
+  };
 
   const getWordsList = async () => {
     const token = localStorage.getItem("authToken");
@@ -57,11 +71,11 @@ const ManageWords = () => {
   }, []);
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsFormModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsFormModalOpen(false);
     setWordTemporal({
       id: "",
       value: "",
@@ -93,37 +107,70 @@ const ManageWords = () => {
     openModal();
   };
 
-  const deleteHandler = async (id) => {
+  const handleDeleteRequest = (word) => {
+    setWordToDelete(word);
+    setIsConfirmDeleteModalOpen(true);
+  };
+
+  const confirmDeleteHandler = async () => {
+    if (!wordToDelete) return;
+
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("No token found. Redirecting to login.");
+      toast.error(
+        "Sesión expirada, por favor inicia sesión nuevamente.",
+        toastConfig
+      );
       navigate("/iniciar_sesion");
       return;
     }
 
-    console.log("[WordsManage] Enviando token para deleteHandler:", token);
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta palabra?")) {
-      try {
-        const response = await fetch(`http://localhost:3000/words/${id}`, {
+    console.log(
+      "[WordsManage] Enviando token para confirmDeleteHandler:",
+      token
+    );
+    try {
+      const response = await fetch(
+        `http://localhost:3000/words/${wordToDelete.id}`,
+        {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-
-        if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            console.error("Token invalid or expired. Redirecting to login.");
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
-            navigate("/iniciar_sesion");
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        await getWordsList(); // Recargar la lista
-      } catch (error) {
-        console.error("Error deleting word:", error);
+      );
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          console.error("Token invalid or expired. Redirecting to login.");
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          toast.error(
+            "Sesión inválida o expirada. Redirigiendo al login.",
+            toastConfig
+          );
+          navigate("/iniciar_sesion");
+          // No lanzar error aquí para evitar doble toast, la redirección es suficiente
+          return;
+        }
+        const errorData = await response.json().catch(() => ({})); // Intenta parsear JSON, si falla, objeto vacío
+        throw new Error(errorData.message || `Error HTTP: ${response.status}`);
       }
+      toast.success(
+        `Palabra "${wordToDelete.value}" eliminada correctamente.`,
+        toastConfig
+      );
+      await getWordsList(); // Recargar la lista
+    } catch (error) {
+      console.error("Error deleting word:", error);
+      toast.error(
+        error.message || "Error al eliminar la palabra.",
+        toastConfig
+      );
+    } finally {
+      setIsConfirmDeleteModalOpen(false);
+      setWordToDelete(null);
     }
   };
 
@@ -148,7 +195,7 @@ const ManageWords = () => {
                 <button
                   className="delete-button"
                   onClick={() => {
-                    deleteHandler(word.id);
+                    handleDeleteRequest(word);
                   }}
                 >
                   <Icon.Trash3Fill color="#FF3333" />
@@ -157,7 +204,7 @@ const ManageWords = () => {
             </li>
           ))}
 
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Modal isOpen={isFormModalOpen} onClose={closeModal}>
             <WordsForm
               wordTemporal={wordTemporal}
               getWordsList={getWordsList}
@@ -165,6 +212,14 @@ const ManageWords = () => {
               onCancel={closeModal}
             />
           </Modal>
+
+          <ConfirmDeleteModal
+            isOpen={isConfirmDeleteModalOpen}
+            onClose={() => setIsConfirmDeleteModalOpen(false)}
+            onConfirm={confirmDeleteHandler}
+            title="Confirmar Eliminación de Palabra"
+            message={`¿Estás seguro de que quieres eliminar la palabra "${wordToDelete?.value}"? Esta acción no se puede deshacer.`}
+          />
         </ul>
       </div>
     </div>
