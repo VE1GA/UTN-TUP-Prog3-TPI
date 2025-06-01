@@ -2,7 +2,10 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import LoginForm from "../components/Auth/LoginForm";
-import ValidationsLogin from "../components/Auth/LoginValidations";
+import ValidationsLogin from "../components/Auth/LoginValidations"; // Asegúrate que la importación sea correcta, parece que hay un error de typo en el nombre del componente. Debería ser LoginValidations
+
+import { toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo por si este componente se usa en otro contexto.
 
 import "../styles/Login.css";
 
@@ -11,6 +14,13 @@ const Login = ({ setIsLoggedIn }) => {
   const passwordRef = useRef(null);
 
   const navigate = useNavigate();
+
+  const toastConfig = {
+    position: "bottom-center",
+    autoClose: 2500,
+    theme: "dark",
+    transition: Slide,
+  };
 
   const terminarLogueo = (userRole) => {
     if (userRole === "ADMIN") {
@@ -51,19 +61,28 @@ const Login = ({ setIsLoggedIn }) => {
             localStorage.setItem("authToken", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
             setIsLoggedIn(true);
-            alert(data.message || "Usuario logueado con éxito");
+            toast.success(
+              data.message || "Usuario logueado con éxito",
+              toastConfig
+            );
             // Redirigir después de un breve retraso
             setTimeout(() => terminarLogueo(data.user.role), 1000);
           } else {
             // Manejar errores de login (ej. credenciales incorrectas)
             console.error("Error de login:", data.message);
-            alert(data.message || "Error al iniciar sesión");
+            toast.error(data.message || "Error al iniciar sesión", toastConfig);
             localStorage.removeItem("authToken");
             localStorage.removeItem("user");
-            setIsLoggedIn(true);
+            setIsLoggedIn(false); // Corregido: Si hay error de login, no debería estar logueado.
           }
         })
-        .catch((error) => console.error("Ocurrió un error:", error));
+        .catch((error) => {
+          console.error("Ocurrió un error:", error);
+          toast.error(
+            "Ocurrió un error de conexión. Intente nuevamente.",
+            toastConfig
+          );
+        });
     }
   };
 

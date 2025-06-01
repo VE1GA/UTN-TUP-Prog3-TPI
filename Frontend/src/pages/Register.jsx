@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import RegisterForm from "../components/Auth/RegisterForm";
 import Validations from "../components/Auth/RegisterValidations";
 
+import { toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo.
+
 import "../styles/Login.css";
 
 const Register = ({ setIsLoggedIn }) => {
@@ -15,6 +18,13 @@ const Register = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
 
   const [errores, setErrores] = useState({});
+
+  const toastConfig = {
+    position: "bottom-center",
+    autoClose: 2500,
+    theme: "dark",
+    transition: Slide,
+  };
 
   const manejarEnvio = (FormData) => {
     const errores = Validations(FormData);
@@ -45,10 +55,19 @@ const Register = ({ setIsLoggedIn }) => {
 
         .then((data) => {
           console.log("Usuario registrado:", data);
-          alert(data.message || "Usuario registrado con éxito!");
+          toast.success(
+            data.message || "Usuario registrado con éxito!",
+            toastConfig
+          );
         })
 
-        .catch((error) => console.error("Ocurrió un error:", error));
+        .catch((error) => {
+          console.error("Ocurrió un error:", error);
+          toast.error(
+            "Ocurrió un error al registrar. Intente nuevamente.",
+            toastConfig
+          );
+        });
 
       setTimeout(navigate("/play"), 1500);
       setIsLoggedIn(true);

@@ -7,6 +7,10 @@ import { getToken, checkToken } from "../../services/Token.services";
 
 import UsersForm from "./UsersForm";
 import Modal from "../../styles/Modal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Importar el nuevo modal
+
+import { toast, Slide } from "react-toastify"; // Para notificaciones
+import "react-toastify/dist/ReactToastify.css";
 
 const UsersManage = () => {
   const [userList, setUserList] = useState([]);
@@ -20,7 +24,17 @@ const UsersManage = () => {
   });
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
+  const toastConfig = {
+    position: "bottom-center",
+    autoClose: 3000,
+    theme: "dark",
+    transition: Slide,
+  };
 
   const getUsersList = async () => {
     const token = getToken(navigate);
@@ -41,7 +55,7 @@ const UsersManage = () => {
   }, []);
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsFormModalOpen(false);
     setUserTemporal({
       id: "",
       name: "",
@@ -53,7 +67,7 @@ const UsersManage = () => {
   };
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsFormModalOpen(true);
   };
 
   const createHandler = () => {
@@ -80,21 +94,44 @@ const UsersManage = () => {
     openModal();
   };
 
-  const deleteHandler = async (id) => {
-    const token = getToken(navigate);
+  const handleDeleteRequest = (user) => {
+    setUserToDelete(user);
+    setIsConfirmDeleteModalOpen(true);
+  };
 
-    if (window.confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+  const confirmDeleteHandler = async () => {
+    if (!userToDelete) return;
+
+    const token = getToken(navigate);
+    try {
       const response = await fetch(`http://localhost:3000/users/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       checkToken(response, navigate);
 
+      toast.success(
+        `Usuario "${userToDelete.name}" eliminado correctamente.`,
+        toastConfig
+      );
       await getUsersList(); // Recargar la lista después de borrar
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error(
+        error.message || "Error al eliminar el usuario.",
+        toastConfig
+      );
+    } finally {
+      setIsConfirmDeleteModalOpen(false);
+      setUserToDelete(null);
     }
+  };
+
+  const closeConfirmDeleteModal = () => {
+    setIsConfirmDeleteModalOpen(false);
+    setUserToDelete(null);
   };
 
   return (
@@ -125,7 +162,7 @@ const UsersManage = () => {
                 <button
                   className="delete-button"
                   onClick={() => {
-                    deleteHandler(user.id);
+                    handleDeleteRequest(user);
                   }}
                 >
                   <Icon.Trash3Fill color="#FF3333" />
@@ -136,7 +173,7 @@ const UsersManage = () => {
         </ul>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isFormModalOpen} onClose={closeModal}>
         <UsersForm
           userTemporal={userTemporal}
           getUsersList={getUsersList}
@@ -144,6 +181,14 @@ const UsersManage = () => {
           onCancel={closeModal}
         />
       </Modal>
+
+      <ConfirmDeleteModal
+        isOpen={isConfirmDeleteModalOpen}
+        onClose={closeConfirmDeleteModal}
+        onConfirm={confirmDeleteHandler}
+        title="Confirmar Eliminación de Usuario"
+        message={`¿Estás seguro de que quieres eliminar al usuario "${userToDelete?.name}"? Esta acción no se puede deshacer.`}
+      />
     </div>
   );
 };
