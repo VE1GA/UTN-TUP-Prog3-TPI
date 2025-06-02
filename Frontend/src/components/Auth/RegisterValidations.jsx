@@ -19,6 +19,12 @@ const RegisterValidations = (datos) => {
     errores.password = "Mínimo 8 caracteres, incluyendo letras y números";
   }
 
+  if (!datos.confirmPassword.trim()) {
+    errores.confirmPassword = "La confirmación de contraseña es obligatoria";
+  } else if (datos.password !== datos.confirmPassword) {
+    errores.confirmPassword = "Las contraseñas no coinciden";
+  }
+
   return errores;
 };
 

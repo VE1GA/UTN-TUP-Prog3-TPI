@@ -36,7 +36,7 @@ const Register = ({ setIsLoggedIn }) => {
         emailRef.current.focus();
       } else if (errores.password && passwordRef.current) {
         passwordRef.current.focus();
-      } else if (errores.confirmpassword && confirmPasswordRef.current) {
+      } else if (errores.confirmPassword && confirmPasswordRef.current) {
         confirmPasswordRef.current.focus();
       }
 
