@@ -157,7 +157,7 @@ const ManageWords = () => {
         const errorData = await response.json().catch(() => ({})); // Intenta parsear JSON, si falla, objeto vacío
         throw new Error(errorData.message || `Error HTTP: ${response.status}`);
       }
-      toast.success(
+      toast.error(
         `Palabra "${wordToDelete.value}" eliminada correctamente.`,
         toastConfig
       );
@@ -217,7 +217,7 @@ const ManageWords = () => {
             isOpen={isConfirmDeleteModalOpen}
             onClose={() => setIsConfirmDeleteModalOpen(false)}
             onConfirm={confirmDeleteHandler}
-            title="Confirmar Eliminación de Palabra"
+            title="Confirmar eliminación de palabra"
             message={`¿Estás seguro de que quieres eliminar la palabra "${wordToDelete?.value}"? Esta acción no se puede deshacer.`}
           />
         </ul>

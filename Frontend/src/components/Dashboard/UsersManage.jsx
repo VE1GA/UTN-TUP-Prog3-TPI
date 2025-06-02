@@ -104,15 +104,18 @@ const UsersManage = () => {
 
     const token = getToken(navigate);
     try {
-      const response = await fetch(`http://localhost:3000/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3000/users/${userToDelete.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       checkToken(response, navigate);
 
-      toast.success(
+      toast.error(
         `Usuario "${userToDelete.name}" eliminado correctamente.`,
         toastConfig
       );
@@ -186,7 +189,7 @@ const UsersManage = () => {
         isOpen={isConfirmDeleteModalOpen}
         onClose={closeConfirmDeleteModal}
         onConfirm={confirmDeleteHandler}
-        title="Confirmar Eliminación de Usuario"
+        title="Confirmar eliminación de usuario"
         message={`¿Estás seguro de que quieres eliminar al usuario "${userToDelete?.name}"? Esta acción no se puede deshacer.`}
       />
     </div>

@@ -1,21 +1,12 @@
-import React from "react";
 import "../../styles/confirmDeleteModal.css";
+import * as Icon from "react-bootstrap-icons";
 
-const ConfirmDeleteModal = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  title,
-  message,
-  confirmButtonText = "Eliminar",
-  cancelButtonText = "Cancelar",
-}) => {
+const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message }) => {
   if (!isOpen) {
     return null;
   }
 
   const handleOverlayClick = (e) => {
-    // Cierra el modal si se hace clic fuera del contenido del modal
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -27,14 +18,14 @@ const ConfirmDeleteModal = ({
         className="confirm-delete-modal-content"
         onClick={(e) => e.stopPropagation()} // Evita que el clic dentro del modal lo cierre
       >
-        <h4>{title || "Confirmar Acción"}</h4>
+        <h1>{title || "Confirmar Acción"}</h1>
         <p>{message || "¿Estás seguro de que quieres proceder?"}</p>
         <div className="confirm-delete-modal-actions">
           <button onClick={onConfirm} className="confirm-delete-button-confirm">
-            {confirmButtonText}
+            <Icon.CheckCircleFill color="#0FC41A" size={40} />
           </button>
           <button onClick={onClose} className="confirm-delete-button-cancel">
-            {cancelButtonText}
+            <Icon.XCircleFill color="#FF3333" size={40} />
           </button>
         </div>
       </div>

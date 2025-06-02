@@ -69,7 +69,10 @@ const Register = ({ setIsLoggedIn }) => {
           );
         });
 
-      setTimeout(navigate("/play"), 1500);
+      setTimeout(() => {
+        navigate("/iniciar_sesion");
+      }, 2500);
+
       setIsLoggedIn(true);
     }
   };

@@ -124,7 +124,13 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       getUsersList();
 
       onSaveSuccess();
-      alert(`${datosEnviar.role} ${datosEnviar.name} ${mensaje}`);
+      toast.success(`Cuenta "${datosEnviar.name}" ${mensaje}`, {
+        toastId: "Error",
+        position: "bottom-center",
+        autoClose: 2000,
+        theme: "dark",
+        transition: Slide,
+      });
     }
   };
 
