@@ -39,3 +39,12 @@
 .home-container button:hover {
   background-color: #0056b3;
 }
+
+.home-container img {
+  width: 10%;
+  height: auto;
+}
+
+.botones button {
+  margin: 20px;
+}

@@ -7,11 +7,15 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1>Página principal 🏠</h1>
-      <button onClick={() => navigate("/registrarse")}>Registrarse</button>
-      <button onClick={() => navigate("/iniciar_sesion")}>
-        Iniciar sesión
-      </button>
+      <h1>Bienvenido a Wordle</h1>
+      <img src="../public/wordle.png" alt="" />
+      <h3> Seleccione una opción</h3>
+      <div className="botones">
+        <button onClick={() => navigate("/registrarse")}>Registrarse</button>
+        <button onClick={() => navigate("/iniciar_sesion")}>
+          Iniciar sesión
+        </button>
+      </div>
     </div>
   );
 };

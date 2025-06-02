@@ -117,10 +117,24 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         await getWordsList();
         // alert(`La palabra ${formData.value} ${mensaje}`);
         onSaveSuccess();
+        toast.success(`Palabra "${formData.value}" ${mensaje}`, {
+          toastId: "valueError",
+          position: "bottom-center",
+          autoClose: 2000,
+          theme: "dark",
+          transition: Slide,
+        });
       } catch (error) {
         console.error(`Error ${tipoLlamada.toLowerCase()} word:`, error);
-        alert(
-          `Error al ${tipoLlamada.toLowerCase()} palabra: ${error.message}`
+        toast.error(
+          `Error al ${tipoLlamada.toLowerCase()} palabra: ${error.message}`,
+          {
+            toastId: "valueError",
+            position: "bottom-center",
+            autoClose: 2000,
+            theme: "dark",
+            transition: Slide,
+          }
         );
       }
     }

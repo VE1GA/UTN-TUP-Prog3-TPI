@@ -11,32 +11,57 @@
   z-index: 1050; /* Asegurar que esté por encima de otros modales si es necesario */
 }
 
+.modal-body button {
+  background-color: #1e1e2f;
+  color: white;
+  padding: 0.5em;
+  margin: 0.5em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 25%;
+  margin-bottom: 10px;
+}
+
 .confirm-delete-modal-content {
-  background-color: #333; /* Fondo oscuro para el contenido del modal */
-  color: #f0f0f0; /* Texto claro */
-  padding: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  width: 90%;
-  max-width: 400px; /* Ancho máximo del modal */
+  background-color: #1e1e2f;
+  width: 50%;
+  min-width: 400px;
+  border-radius: 1rem;
+  position: relative;
+  padding: 1rem;
+}
+
+.confirm-delete-modal-content h1 {
+  color: white;
+  margin: 20px;
+  margin-top: 40px;
   text-align: center;
 }
 
-.confirm-delete-modal-content h4 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #ffc107; /* Amarillo para el título, o un color de advertencia */
-}
-
 .confirm-delete-modal-content p {
-  margin-bottom: 25px;
-  font-size: 1rem;
-  line-height: 1.5;
+  text-align: center;
+  color: white;
+  width: 100%;
 }
 
 .confirm-delete-modal-actions {
   display: flex;
-  justify-content: space-around; /* Espacio entre botones */
+  justify-self: center;
+}
+
+.confirm-delete-modal-actions button {
+  background-color: #1e1e2f;
+  color: white;
+  padding: 0.5em;
+  margin: 0.5em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 25%;
+  margin-bottom: 10px;
 }
 
 .confirm-delete-modal-actions button {
@@ -47,24 +72,4 @@
   font-weight: bold;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease;
   min-width: 100px;
-}
-
-.confirm-delete-button-confirm {
-  background-color: #dc3545; /* Rojo para confirmar eliminación */
-  color: white;
-}
-
-.confirm-delete-button-confirm:hover {
-  background-color: #c82333;
-  transform: translateY(-1px);
-}
-
-.confirm-delete-button-cancel {
-  background-color: #6c757d; /* Gris para cancelar */
-  color: white;
-}
-
-.confirm-delete-button-cancel:hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
 }
