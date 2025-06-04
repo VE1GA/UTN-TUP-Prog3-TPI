@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 import Board from "../components/Game/Board";
 import Keyboard from "../components/Game/Keyboard";
+import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
 
 export const WordleContext = createContext();
@@ -21,7 +22,7 @@ const Wordle = () => {
   useEffect(() => {
     generateGameWords().then((words) => {
       setWordBank(words.wordBank);
-      setCorrectWord(words.todaysWord);
+      setCorrectWord(words.correctWord);
       console.log(words);
     });
   }, []);
@@ -41,8 +42,18 @@ const Wordle = () => {
     for (let i = 0; i < 5; i++) {
       currWord += board[currAttempt.attempt][i];
     }
-    // if (wordBank.has(currWord.toLowerCase())) {
-    setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 }); // Pasa al siguiente renglón
+    if (wordBank.has(currWord.toUpperCase())) {
+      setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 }); // Pasa al siguiente renglón
+    } else {
+      alert("Palabra no válida");
+    }
+    if (currWord.toUpperCase() === correctWord) {
+      setGameOver({ gameOver: true, guessedWord: true });
+      return;
+    }
+    if (currAttempt.attempt === 5) {
+      setGameOver({ gameOver: true, guessedWord: false });
+    }
   };
 
   const onDelete = () => {
@@ -69,6 +80,7 @@ const Wordle = () => {
           setDisabledLetters,
           disabledLetters,
           gameOver,
+          setGameOver,
         }}
       >
         <nav>
@@ -76,8 +88,7 @@ const Wordle = () => {
         </nav>
         <div className="game">
           <Board />
-          {/* {gameOver.gameOver ? <GameOver /> : <Keyboard />} */}
-          <Keyboard />
+          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
         </div>
       </WordleContext.Provider>
     </div>
