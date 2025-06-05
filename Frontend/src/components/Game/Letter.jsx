@@ -11,7 +11,7 @@ const Letter = ({ letterPos, attemptVal }) => {
     disabledLetters,
   } = useContext(WordleContext);
 
-  const letter = board[attemptVal][letterPos];
+  const letter = board[attemptVal][letterPos] || "";
 
   const correct = correctWord[letterPos] === letter;
   const almost = !correct && letter !== "" && correctWord.includes(letter);

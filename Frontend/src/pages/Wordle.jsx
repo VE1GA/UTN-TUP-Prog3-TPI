@@ -19,6 +19,19 @@ const Wordle = () => {
     guessedWord: false,
   });
 
+  const resetGame = async () => {
+    const newBoard = boardDefault.map((row) => row.map(() => ""));
+
+    setBoard(newBoard);
+    setCurrAttempt({ attempt: 0, letterPos: 0 });
+    setDisabledLetters([]);
+    setGameOver({ gameOver: false, guessedWord: false });
+
+    const words = await generateGameWords();
+    setWordBank(words.wordBank);
+    setCorrectWord(words.correctWord);
+  };
+
   useEffect(() => {
     generateGameWords().then((words) => {
       setWordBank(words.wordBank);
@@ -81,6 +94,7 @@ const Wordle = () => {
           disabledLetters,
           gameOver,
           setGameOver,
+          resetGame,
         }}
       >
         <nav>
