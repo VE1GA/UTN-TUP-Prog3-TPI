@@ -4,6 +4,9 @@ import Board from "../components/Game/Board";
 import Keyboard from "../components/Game/Keyboard";
 import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
+import Modal from ".././styles/Modal";
+import { toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const WordleContext = createContext();
 
@@ -18,6 +21,12 @@ const Wordle = () => {
     gameOver: false,
     guessedWord: false,
   });
+
+  const toastConfig = {
+    autoClose: 3000,
+    theme: "dark",
+    transition: Slide,
+  };
 
   const resetGame = async () => {
     const newBoard = boardDefault.map((row) => row.map(() => ""));
@@ -58,7 +67,7 @@ const Wordle = () => {
     if (wordBank.has(currWord.toUpperCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 }); // Pasa al siguiente renglón
     } else {
-      alert("Palabra no válida");
+      toast.error("Palabra no válida", toastConfig);
     }
     if (currWord.toUpperCase() === correctWord) {
       setGameOver({ gameOver: true, guessedWord: true });
@@ -102,7 +111,14 @@ const Wordle = () => {
         </nav>
         <div className="game">
           <Board />
-          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+
+          {gameOver.gameOver ? (
+            <Modal isOpen={gameOver.gameOver} onClose={resetGame}>
+              <GameOver />
+            </Modal>
+          ) : (
+            <Keyboard />
+          )}
         </div>
       </WordleContext.Provider>
     </div>

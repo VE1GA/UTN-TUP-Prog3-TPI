@@ -84,3 +84,26 @@
   position: relative;
   top: -10.5px;
 }
+
+.modal-body .boton-reset {
+  background-color: #28a745;
+  color: white;
+  padding: 0.7em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 25%;
+  margin-bottom: 10px;
+}
+
+.modal-body .gameOver {
+  color: white;
+  margin: 20px;
+  margin-top: 40px;
+}
+
+.modal-body .gameOver h1,
+h2 {
+  padding-bottom: 20px;
+}
