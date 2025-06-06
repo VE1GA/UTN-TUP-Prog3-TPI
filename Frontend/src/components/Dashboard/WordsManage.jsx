@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import * as Icon from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
-import WordsForm from "./WordsForm";
-import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Importar el nuevo modal
+import * as Icon from "react-bootstrap-icons";
 
-import { toast, Slide } from "react-toastify"; // Para notificaciones
+import Modal from "../../styles/Modal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import WordsForm from "./WordsForm";
 
 const ManageWords = () => {
   const [wordList, setWordList] = useState([]);

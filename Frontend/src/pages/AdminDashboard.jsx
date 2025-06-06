@@ -1,6 +1,7 @@
+import "../styles/AdminDashboard.css";
+
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import "../styles/AdminDashboard.css";
 
 import UsersManage from "../components/Dashboard/UsersManage";
 import WordsManage from "../components/Dashboard/WordsManage";

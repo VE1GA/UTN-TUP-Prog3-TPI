@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <h1>Bienvenido a Wordle</h1>
-      <img src="../public/wordle.png" alt="" />
+      <img src="wordle.png" alt="" />
       <h3> Seleccione una opción</h3>
       <div className="botones">
         <button onClick={() => navigate("/registrarse")}>Registrarse</button>

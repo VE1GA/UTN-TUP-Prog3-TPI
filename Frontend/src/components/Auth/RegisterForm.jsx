@@ -10,6 +10,8 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
     role: "USER",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -20,12 +22,6 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-  };
-
-  const navigate = useNavigate();
-
-  const volverAlInicio = () => {
-    navigate("/");
   };
 
   return (
@@ -57,6 +53,9 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
               ref={refs.emailRef}
             />
             {errores.email && <p style={{ color: "red" }}>{errores.email}</p>}
+            {errores.repetido && (
+              <p style={{ color: "red" }}>{errores.repetido}</p>
+            )}
           </div>
           <div>
             <label>Contraseña: </label>
@@ -86,7 +85,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
           </div>
           <button type="submit">Enviar</button>
         </form>
-        <button onClick={volverAlInicio}>Volver al inicio</button>
+        <button onClick={() => navigate("/")}>Volver al inicio</button>
       </div>
     </div>
   );

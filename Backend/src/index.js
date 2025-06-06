@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+
 import { PORT } from "./config.js";
 import { sequelize } from "./db.js";
 
@@ -13,7 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:5173",
-    allowedHeaders: ["*"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );

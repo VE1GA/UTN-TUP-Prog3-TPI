@@ -12,8 +12,8 @@ import Register from "./pages/Register";
 import Wordle from "./pages/Wordle";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
-import UserProtected from "./components/UserProtected";
-import AdminProtected from "./components/AdminProtected";
+import UserProtected from "./components/Auth/UserProtected";
+import AdminProtected from "./components/Auth/AdminProtected";
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(false);

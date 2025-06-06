@@ -32,10 +32,8 @@ export const EditExistingWord = async (req, res) => {
 };
 
 export const importarPalabrasIniciales = async () => {
-  // Crear una variable para verificar luego si el banco de palabras está vacío
   const count = await Word.count();
 
-  // Importar palabras si no existen
   if (count === 0) {
     console.log(
       "[INFO] No existen palabras en el banco de palabras.\n[INFO] Se van a importar +1000 palabras, esto puede demorar un tiempo.\n[INFO] Importando palabras..."

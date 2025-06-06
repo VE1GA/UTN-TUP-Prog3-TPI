@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
+import { getToken, checkToken } from "../../services/Token.services";
+
 export const boardDefault = [
   ["", "", "", "", ""],
   ["", "", "", "", ""],
@@ -6,6 +10,8 @@ export const boardDefault = [
   ["", "", "", "", ""],
   ["", "", "", "", ""],
 ];
+
+const navigate = useNavigate;
 
 const luckyWordBank = (words) => {
   const pesoTotal = words.reduce((sum, word) => {
@@ -26,51 +32,16 @@ const luckyWordBank = (words) => {
   }
 };
 
-const getWordsList = async () => {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    console.error("No token found. Redirecting to login.");
-    navigate("/iniciar_sesion");
-    return;
-  }
-
-  console.log("[WordsManage] Enviando token para getWordsList:", token);
-  try {
-    const response = await fetch("http://localhost:3000/words", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) {
-        console.error("Token invalid or expired. Redirecting to login.");
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
-        navigate("/iniciar_sesion");
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setWordList(data);
-  } catch (error) {
-    console.error("Error fetching words:", error);
-    // Podrías establecer un estado de error aquí para mostrar en la UI
-  }
-};
 export const generateGameWords = async () => {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    console.error("No token found. Redirecting to login.");
-    navigate("/iniciar_sesion");
-    return;
-  }
+  const token = getToken(navigate);
 
   const response = await fetch("http://localhost:3000/words", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  checkToken(response, navigate);
 
   const data = await response.json();
 

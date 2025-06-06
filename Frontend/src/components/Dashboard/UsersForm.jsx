@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 
-import { getToken, checkToken } from "../../services/Token.services";
-
-import Validations from "../Auth/RegisterValidations";
-
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { getToken, checkToken } from "../../services/Token.services";
+
+import { Validations } from "../../services/Validations";
 
 const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -59,7 +59,7 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const errores = Validations(formData);
+    const errores = await Validations(formData, "edit");
 
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {
@@ -126,7 +126,7 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       onSaveSuccess();
       toast.success(`Cuenta "${datosEnviar.name}" ${mensaje}`, {
         toastId: "Error",
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 2000,
         theme: "dark",
         transition: Slide,
@@ -139,7 +139,7 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       <div>
         <h1>
           {" "}
-          {userTemporal.creando ? "Creando usuario" : "Editando usuario"}{" "}
+          {userTemporal.creando ? "Creando usuario" : "Editando usuario"}
         </h1>
 
         <label>Nombre: </label>

@@ -21,10 +21,6 @@ const LoginForm = ({ onSubmit, errores, refs }) => {
     onSubmit(formData);
   };
 
-  const volverAlInicio = () => {
-    navigate("/");
-  };
-
   return (
     <div className="login-form body">
       <div className="container">
@@ -63,7 +59,7 @@ const LoginForm = ({ onSubmit, errores, refs }) => {
             <button type="submit">Enviar</button>
           </div>
         </form>
-        <button onClick={volverAlInicio}>Volver al inicio</button>
+        <button onClick={() => navigate("/")}>Volver al inicio</button>
       </div>
     </div>
   );

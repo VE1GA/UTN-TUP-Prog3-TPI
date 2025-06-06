@@ -1,16 +1,17 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import * as Icon from "react-bootstrap-icons";
 
+import Modal from "../../styles/Modal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import { toast, Slide } from "react-toastify"; // Para notificaciones
+
 import { getToken, checkToken } from "../../services/Token.services";
 
 import UsersForm from "./UsersForm";
-import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Importar el nuevo modal
-
-import { toast, Slide } from "react-toastify"; // Para notificaciones
-import "react-toastify/dist/ReactToastify.css";
 
 const UsersManage = () => {
   const [userList, setUserList] = useState([]);
@@ -30,7 +31,7 @@ const UsersManage = () => {
   const [userToDelete, setUserToDelete] = useState(null);
 
   const toastConfig = {
-    position: "bottom-center",
+    position: "top-center",
     autoClose: 3000,
     theme: "dark",
     transition: Slide,
