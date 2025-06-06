@@ -17,6 +17,7 @@ export const registerUser = async (req, res) => {
   });
 };
 
+// Búsqueda en el sistema del usuario ingresado
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -25,12 +26,13 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ message: "Usuario no existente" });
   }
 
+  // Checkeo de la contraseña encriptada
   const passwordCheck = await bcrypt.compare(password, enteredUser.password);
   if (!passwordCheck) {
     return res.status(401).json({ message: "Email y/o contraseña incorrecta" });
   }
 
-  // Generar JWT
+  // Generación del token
   const tokenPayload = {
     id: enteredUser.id,
     email: enteredUser.email,
@@ -38,7 +40,7 @@ export const loginUser = async (req, res) => {
   };
 
   const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "1h" }); // El token expira en 1 hora
-  console.log("[Auth Service] Token generado:", token); // Log del token generado
+  console.log("[Auth Service] Token generado:", token);
 
   res.status(200).json({
     message: "Logueado exitosamente",
@@ -52,6 +54,20 @@ export const loginUser = async (req, res) => {
   });
 };
 
+export const usuarioRepetido = async (req, res) => {
+  const { email } = req.body;
+
+  const foundUser = await User.findOne({ where: { email } });
+  console.log(foundUser);
+
+  if (foundUser) {
+    res.json(true);
+  } else {
+    res.json(false);
+  }
+};
+
+// Función que crea a un primer administrador para poder acceder al dashboard
 export const crearAdminInicial = async () => {
   const email = "pedritopascal@gmail.com";
 

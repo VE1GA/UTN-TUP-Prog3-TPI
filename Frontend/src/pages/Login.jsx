@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import LoginForm from "../components/Auth/LoginForm";
-import ValidationsLogin from "../components/Auth/LoginValidations"; // Asegúrate que la importación sea correcta, parece que hay un error de typo en el nombre del componente. Debería ser LoginValidations
+import { Validations } from "../services/Validations";
 
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo por si este componente se usa en otro contexto.
@@ -16,7 +16,7 @@ const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
 
   const toastConfig = {
-    position: "bottom-center",
+    position: "top-center",
     autoClose: 2500,
     theme: "dark",
     transition: Slide,
@@ -32,8 +32,8 @@ const Login = ({ setIsLoggedIn }) => {
 
   const [errores, setErrores] = useState({});
 
-  const manejarEnvio = (FormData) => {
-    const errores = ValidationsLogin({ datos: FormData });
+  const manejarEnvio = async (FormData) => {
+    const errores = await Validations(FormData, "login");
 
     if (Object.keys(errores).length > 0) {
       if (errores.email && emailRef.current) {
@@ -87,15 +87,13 @@ const Login = ({ setIsLoggedIn }) => {
   };
 
   return (
-    <>
-      <div>
-        <LoginForm
-          onSubmit={manejarEnvio}
-          errores={errores}
-          refs={{ emailRef, passwordRef }}
-        />
-      </div>
-    </>
+    <div>
+      <LoginForm
+        onSubmit={manejarEnvio}
+        errores={errores}
+        refs={{ emailRef, passwordRef }}
+      />
+    </div>
   );
 };
 

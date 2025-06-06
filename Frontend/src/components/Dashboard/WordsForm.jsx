@@ -3,10 +3,10 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 
-import WordsValidations from "../WordsValidations";
-
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { Validations } from "../../services/Validations";
 
 const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
   // Declaraciones
@@ -46,7 +46,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const errores = WordsValidations(formData);
+    const errores = await Validations(formData, "words");
     if (Object.keys(errores).length > 0) {
       if (errores.value && valueRef.current) {
         valueRef.current.focus();
@@ -82,6 +82,11 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         mensaje = "se modificó correctamente";
       }
 
+      const payload = {
+        value: formData.value.toUpperCase(),
+        luck: formData.luck,
+      };
+
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No token found. Redirecting to login.");
@@ -97,7 +102,7 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -115,11 +120,10 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
         }
 
         await getWordsList();
-        // alert(`La palabra ${formData.value} ${mensaje}`);
         onSaveSuccess();
         toast.success(`Palabra "${formData.value}" ${mensaje}`, {
           toastId: "valueError",
-          position: "bottom-center",
+          position: "top-center",
           autoClose: 2000,
           theme: "dark",
           transition: Slide,

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import RegisterForm from "../components/Auth/RegisterForm";
-import Validations from "../components/Auth/RegisterValidations";
+import { Validations } from "../services/Validations";
 
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo.
@@ -26,13 +26,13 @@ const Register = ({ setIsLoggedIn }) => {
     transition: Slide,
   };
 
-  const manejarEnvio = (FormData) => {
-    const errores = Validations(FormData);
+  const manejarEnvio = async (FormData) => {
+    const errores = await Validations(FormData, "register");
 
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {
         nameRef.current.focus();
-      } else if (errores.email && emailRef.current) {
+      } else if ((errores.email || errores.repetido) && emailRef.current) {
         emailRef.current.focus();
       } else if (errores.password && passwordRef.current) {
         passwordRef.current.focus();
@@ -44,7 +44,7 @@ const Register = ({ setIsLoggedIn }) => {
     } else {
       setErrores({});
 
-      fetch("http://localhost:3000/register", {
+      await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

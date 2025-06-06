@@ -1,12 +1,14 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { createContext, useState, useEffect } from "react";
+
+import Modal from ".././styles/Modal";
+import { toast, Slide } from "react-toastify";
 
 import Board from "../components/Game/Board";
 import Keyboard from "../components/Game/Keyboard";
 import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
-import Modal from ".././styles/Modal";
-import { toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export const WordleContext = createContext();
 
@@ -39,12 +41,15 @@ const Wordle = () => {
     const words = await generateGameWords();
     setWordBank(words.wordBank);
     setCorrectWord(words.correctWord);
+
+    console.log(words);
   };
 
   useEffect(() => {
     generateGameWords().then((words) => {
       setWordBank(words.wordBank);
       setCorrectWord(words.correctWord);
+
       console.log(words);
     });
   }, []);

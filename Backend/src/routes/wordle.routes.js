@@ -7,9 +7,10 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 
 export const router = Router();
 
-// Endpoints de autenticación
+// Endpoints de autenticación y creación de cuentas
 router.post("/register", auth.registerUser);
 router.post("/login", auth.loginUser);
+router.post("/check_repeat", auth.usuarioRepetido);
 
 // Endpoints de cuentas de usuarios
 router.get("/users", verifyToken, users.getUserList);
