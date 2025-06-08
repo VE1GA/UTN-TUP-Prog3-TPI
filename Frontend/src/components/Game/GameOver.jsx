@@ -8,9 +8,9 @@ const GameOver = () => {
   return (
     <div className="gameOver">
       <h1>{gameOver.guessedWord ? "Adivinaste la palabra" : "Perdiste"}</h1>
-      <h2>Palabra correcta: {correctWord}</h2>
+      <h2>La palabra era {correctWord}</h2>
       {gameOver.guessedWord && (
-        <h3>Adivinaste en: {currAttempt.attempt} intentos</h3>
+        <h3>Adivinaste en {currAttempt.attempt} intentos</h3>
       )}
       <button className="boton-reset" onClick={resetGame}>
         Volver a jugar

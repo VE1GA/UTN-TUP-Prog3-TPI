@@ -43,7 +43,7 @@ export const loginUser = async (req, res) => {
   console.log("[Auth Service] Token generado:", token);
 
   res.status(200).json({
-    message: "Logueado exitosamente",
+    message: "Sesión iniciada correctamente",
     token: token,
     user: {
       id: enteredUser.id,

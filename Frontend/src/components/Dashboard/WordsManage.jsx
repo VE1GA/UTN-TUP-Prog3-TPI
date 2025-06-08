@@ -1,14 +1,19 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import * as Icon from "react-bootstrap-icons";
+import { toast } from "react-toastify";
 
 import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "../ConfirmDeleteModal";
-import { toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 import WordsForm from "./WordsForm";
+import {
+  toastSuccessConfig,
+  toastErrorConfig,
+} from "../../pages/AdminDashboard";
 
 const ManageWords = () => {
   const [wordList, setWordList] = useState([]);
@@ -26,13 +31,6 @@ const ManageWords = () => {
   const [wordToDelete, setWordToDelete] = useState(null);
 
   const navigate = useNavigate();
-
-  const toastConfig = {
-    position: "bottom-center",
-    autoClose: 3000,
-    theme: "dark",
-    transition: Slide,
-  };
 
   const getWordsList = async () => {
     const token = localStorage.getItem("authToken");
@@ -63,7 +61,6 @@ const ManageWords = () => {
       setWordList(data);
     } catch (error) {
       console.error("Error fetching words:", error);
-      // Podrías establecer un estado de error aquí para mostrar en la UI
     }
   };
 
@@ -121,7 +118,7 @@ const ManageWords = () => {
       console.error("No token found. Redirecting to login.");
       toast.error(
         "Sesión expirada, por favor inicia sesión nuevamente.",
-        toastConfig
+        toastErrorConfig
       );
       navigate("/iniciar_sesion");
       return;
@@ -149,25 +146,24 @@ const ManageWords = () => {
           localStorage.removeItem("user");
           toast.error(
             "Sesión inválida o expirada. Redirigiendo al login.",
-            toastConfig
+            toastErrorConfig
           );
           navigate("/iniciar_sesion");
-          // No lanzar error aquí para evitar doble toast, la redirección es suficiente
           return;
         }
         const errorData = await response.json().catch(() => ({})); // Intenta parsear JSON, si falla, objeto vacío
         throw new Error(errorData.message || `Error HTTP: ${response.status}`);
       }
-      toast.error(
+      toast.success(
         `Palabra "${wordToDelete.value}" eliminada correctamente.`,
-        toastConfig
+        toastSuccessConfig
       );
-      await getWordsList(); // Recargar la lista
+      await getWordsList();
     } catch (error) {
       console.error("Error deleting word:", error);
       toast.error(
         error.message || "Error al eliminar la palabra.",
-        toastConfig
+        toastErrorConfig
       );
     } finally {
       setIsConfirmDeleteModalOpen(false);

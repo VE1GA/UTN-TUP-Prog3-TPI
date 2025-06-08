@@ -1,10 +1,26 @@
 import "../styles/AdminDashboard.css";
+import "react-toastify/dist/ReactToastify.css";
 
-import { useNavigate, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
+import { useNavigate, Routes, Route } from "react-router-dom";
+import { Slide } from "react-toastify";
 
 import UsersManage from "../components/Dashboard/UsersManage";
 import WordsManage from "../components/Dashboard/WordsManage";
+
+export const toastSuccessConfig = {
+  position: "bottom-center",
+  autoClose: 3000,
+  theme: "dark",
+  transition: Slide,
+};
+
+export const toastErrorConfig = {
+  position: "top-right",
+  autoClose: 2000,
+  theme: "dark",
+  transition: Slide,
+};
 
 const AdminDashboard = () => {
   const navigate = useNavigate();

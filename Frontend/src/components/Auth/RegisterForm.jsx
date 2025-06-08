@@ -83,7 +83,7 @@ const RegisterForm = ({ onSubmit, errores, refs }) => {
               <p style={{ color: "red" }}>{errores.confirmPassword}</p>
             )}
           </div>
-          <button type="submit">Enviar</button>
+          <button type="submit">Registrarse</button>
         </form>
         <button onClick={() => navigate("/")}>Volver al inicio</button>
       </div>
