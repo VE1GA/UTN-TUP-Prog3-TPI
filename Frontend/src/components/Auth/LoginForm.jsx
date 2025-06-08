@@ -56,7 +56,7 @@ const LoginForm = ({ onSubmit, errores, refs }) => {
               )}
             </div>
 
-            <button type="submit">Enviar</button>
+            <button type="submit">Iniciar sesión</button>
           </div>
         </form>
         <button onClick={() => navigate("/")}>Volver al inicio</button>

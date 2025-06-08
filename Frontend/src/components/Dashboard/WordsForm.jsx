@@ -1,12 +1,16 @@
-import { useEffect, useState, useRef } from "react";
-
-import { useNavigate } from "react-router-dom";
-import * as Icon from "react-bootstrap-icons";
-
-import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+import * as Icon from "react-bootstrap-icons";
+import { toast, Slide } from "react-toastify";
+
 import { Validations } from "../../services/Validations";
+import {
+  toastSuccessConfig,
+  toastErrorConfig,
+} from "../../pages/AdminDashboard";
 
 const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
   // Declaraciones
@@ -50,22 +54,10 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
     if (Object.keys(errores).length > 0) {
       if (errores.value && valueRef.current) {
         valueRef.current.focus();
-        toast.error(errores.value, {
-          toastId: "valueError",
-          position: "bottom-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
+        toast.error(errores.value, toastErrorConfig);
       } else if (errores.luck && luckRef.current) {
         luckRef.current.focus();
-        toast.error(errores.luck, {
-          toastId: "luckError",
-          position: "bottom-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
+        toast.error(errores.luck, toastErrorConfig);
       }
 
       setErrores(errores);
@@ -95,52 +87,35 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
       }
       console.log(`[WordsForm - ${tipoLlamada}] Enviando token:`, token);
 
-      try {
-        const response = await fetch(endpoint, {
-          method: metodo,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+      const response = await fetch(endpoint, {
+        method: metodo,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-        if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            console.error("Token invalid or expired. Redirecting to login.");
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
-            navigate("/iniciar_sesion");
-            return;
-          }
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || `HTTP error! status: ${response.status}`
-          );
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          console.error("Token invalid or expired. Redirecting to login.");
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          navigate("/iniciar_sesion");
+          return;
         }
-
-        await getWordsList();
-        onSaveSuccess();
-        toast.success(`Palabra "${formData.value}" ${mensaje}`, {
-          toastId: "valueError",
-          position: "top-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
-      } catch (error) {
-        console.error(`Error ${tipoLlamada.toLowerCase()} word:`, error);
-        toast.error(
-          `Error al ${tipoLlamada.toLowerCase()} palabra: ${error.message}`,
-          {
-            toastId: "valueError",
-            position: "bottom-center",
-            autoClose: 2000,
-            theme: "dark",
-            transition: Slide,
-          }
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || `HTTP error! status: ${response.status}`
         );
       }
+
+      await getWordsList();
+      onSaveSuccess();
+      toast.success(
+        `Palabra "${formData.value}" ${mensaje}`,
+        toastSuccessConfig
+      );
     }
   };
 

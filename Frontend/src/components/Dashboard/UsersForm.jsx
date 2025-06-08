@@ -1,15 +1,18 @@
-import { useEffect, useState, useRef } from "react";
-
-import { useNavigate } from "react-router-dom";
-import { Form } from "react-bootstrap";
-import * as Icon from "react-bootstrap-icons";
-
-import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { getToken, checkToken } from "../../services/Token.services";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { Form } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
+import { toast, Slide } from "react-toastify";
+
+import { getToken, checkToken } from "../../services/Token.services";
 import { Validations } from "../../services/Validations";
+import {
+  toastSuccessConfig,
+  toastErrorConfig,
+} from "../../pages/AdminDashboard";
 
 const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -64,31 +67,13 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
     if (Object.keys(errores).length > 0) {
       if (errores.name && nameRef.current) {
         nameRef.current.focus();
-        toast.error(errores.name, {
-          toastId: "valueError",
-          position: "bottom-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
+        toast.error(errores.name, toastErrorConfig);
       } else if (errores.email && emailRef.current) {
         emailRef.current.focus();
-        toast.error(errores.email, {
-          toastId: "valueError",
-          position: "bottom-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
+        toast.error(errores.email, toastErrorConfig);
       } else if (errores.password && passwordRef.current) {
         passwordRef.current.focus();
-        toast.error(errores.password, {
-          toastId: "valueError",
-          position: "bottom-center",
-          autoClose: 2000,
-          theme: "dark",
-          transition: Slide,
-        });
+        toast.error(errores.password, toastErrorConfig);
       }
 
       setErrores(errores);
@@ -103,7 +88,7 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       if (tipoLlamada === "Creando") {
         endpoint = "http://localhost:3000/register";
         metodo = "POST";
-        mensaje = "se añadió correctamente";
+        mensaje = "se creó correctamente";
       } else if (tipoLlamada === "Editando") {
         endpoint = `http://localhost:3000/users/${userTemporal.id}`;
         metodo = "PUT";
@@ -124,13 +109,10 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       getUsersList();
 
       onSaveSuccess();
-      toast.success(`Cuenta "${datosEnviar.name}" ${mensaje}`, {
-        toastId: "Error",
-        position: "top-center",
-        autoClose: 2000,
-        theme: "dark",
-        transition: Slide,
-      });
+      toast.success(
+        `Cuenta "${datosEnviar.name}" ${mensaje}`,
+        toastSuccessConfig
+      );
     }
   };
 

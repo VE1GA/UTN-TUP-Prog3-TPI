@@ -1,4 +1,4 @@
-import "../styles/ConfirmDeleteModal.css";
+import "../../styles/ConfirmDeleteModal.css";
 import * as Icon from "react-bootstrap-icons";
 
 const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message }) => {
@@ -18,8 +18,8 @@ const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message }) => {
         className="confirm-delete-modal-content"
         onClick={(e) => e.stopPropagation()} // Evita que el clic dentro del modal lo cierre
       >
-        <h1>{title || "Confirmar Acción"}</h1>
-        <p>{message || "¿Estás seguro de que quieres proceder?"}</p>
+        <h1>{title}</h1>
+        <p>{message}</p>
         <div className="confirm-delete-modal-actions">
           <button onClick={onConfirm} className="confirm-delete-button-confirm">
             <Icon.CheckCircleFill color="#0FC41A" size={40} />

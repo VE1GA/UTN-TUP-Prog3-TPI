@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import * as Icon from "react-bootstrap-icons";
+import { toast } from "react-toastify";
 
 import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "../ConfirmDeleteModal";
-import { toast, Slide } from "react-toastify"; // Para notificaciones
-
-import { getToken, checkToken } from "../../services/Token.services";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 import UsersForm from "./UsersForm";
+import {
+  toastSuccessConfig,
+  toastErrorConfig,
+} from "../../pages/AdminDashboard";
+import { getToken, checkToken } from "../../services/Token.services";
 
 const UsersManage = () => {
   const [userList, setUserList] = useState([]);
@@ -29,13 +32,6 @@ const UsersManage = () => {
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
-
-  const toastConfig = {
-    position: "top-center",
-    autoClose: 3000,
-    theme: "dark",
-    transition: Slide,
-  };
 
   const getUsersList = async () => {
     const token = getToken(navigate);
@@ -116,16 +112,16 @@ const UsersManage = () => {
       );
       checkToken(response, navigate);
 
-      toast.error(
+      toast.success(
         `Usuario "${userToDelete.name}" eliminado correctamente.`,
-        toastConfig
+        toastSuccessConfig
       );
       await getUsersList(); // Recargar la lista después de borrar
     } catch (error) {
       console.error("Error deleting user:", error);
       toast.error(
         error.message || "Error al eliminar el usuario.",
-        toastConfig
+        toastErrorConfig
       );
     } finally {
       setIsConfirmDeleteModalOpen(false);
