@@ -1057,6 +1057,7 @@ const palabrasIniciales = [
   "YEMAS",
   "YENDO",
   "ZONAS",
+  "ROURI",
 ];
 
 export default palabrasIniciales;
