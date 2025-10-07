@@ -14,6 +14,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import UserProtected from "./components/Auth/UserProtected";
 import AdminProtected from "./components/Auth/AdminProtected";
+import { Ranking } from "./pages/Ranking";
+import { Perfil } from "./pages/Perfil";
+import { Equipos } from "./pages/Equipos";
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(false);
@@ -23,6 +26,9 @@ function App() {
         <Routes>
           <Route path="/*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
+          <Route path="/ranking" element={<Ranking />} />
+          <Route path="/equipos" element={<Equipos />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route
             path="/admin_dashboard/*"
             element={
