@@ -9,6 +9,8 @@ import Board from "../components/Game/Board";
 import Keyboard from "../components/Game/Keyboard";
 import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
+import { useNavigate } from "react-router-dom";
+import "../styles/App.css";
 
 export const WordleContext = createContext();
 
@@ -23,6 +25,8 @@ const Wordle = () => {
     gameOver: false,
     guessedWord: false,
   });
+
+  const navigate = useNavigate();
 
   const toastConfig = {
     autoClose: 3000,
@@ -114,6 +118,13 @@ const Wordle = () => {
         <nav>
           <h1>Wordle</h1>
         </nav>
+
+        <div className="botones">
+          <button onClick={() => navigate("/ranking")}>Ranking</button>
+          <button onClick={() => navigate("/perfil")}>Perfil</button>
+          <button onClick={() => navigate("/equipos")}>Equipos</button>
+        </div>
+
         <div className="game">
           <Board />
 
