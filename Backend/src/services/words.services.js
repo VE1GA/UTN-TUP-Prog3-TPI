@@ -1,4 +1,4 @@
-import { Word } from "../models/Word.js";
+import { Word } from "../db.js";
 
 import palabrasIniciales from "../data/palabrasIniciales.js";
 
