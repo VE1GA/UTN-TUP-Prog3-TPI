@@ -1,20 +1,27 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
 
-export const Tournament = sequelize.define(
-  "teams",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+const TournamentModel = (sequelize) => {
+  const Tournament = sequelize.define(
+    "Tournaments",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      teamsInfo: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: false,
-  }
-);
+    {
+      timestamps: false,
+    }
+  );
+  return Tournament;
+};
+export default TournamentModel;

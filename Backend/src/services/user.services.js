@@ -1,4 +1,4 @@
-import { User, hashPassword } from "../models/User.js";
+import { User } from "../db.js";
 
 export const getUserList = async (req, res) => {
   const UserList = await User.findAll();
@@ -13,7 +13,6 @@ export const DeleteUser = async (req, res) => {
 
 export const EditExistingUser = async (req, res) => {
   const { id } = req.params;
-  await hashPassword(req.body);
   await User.update(req.body, { where: { id } });
   res.json({ message: `[BACKEND] Usuario con id ${id} editado exitosamente` });
 };
