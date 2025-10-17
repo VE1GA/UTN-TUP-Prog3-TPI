@@ -1,17 +1,25 @@
 {
-  "name": "prog3-tpi-backend",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "wordle-tfi-backend",
+  "version": "2.0.0",
+  "description": "Backend del Trabajo Final Integrador de la TUP, un clon de Wordle",
+  "keywords": [],
+  "homepage": "https://github.com/VE1GA/UTN-TUP-TrabajoFinal#readme",
+  "bugs": {
+    "url": "https://github.com/VE1GA/UTN-TUP-TrabajoFinal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VE1GA/UTN-TUP-TrabajoFinal.git"
+  },
+  "license": "ISC",
+  "author": "FaustoPonce, VE1GA, mateeoz",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",

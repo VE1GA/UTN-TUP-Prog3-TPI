@@ -1,8 +1,21 @@
 {
-  "name": "prog3-tpi-frontend",
+  "name": "wordle-tfi-frontend",
+  "version": "2.0.0",
   "private": true,
-  "version": "0.0.0",
+  "description": "Frontend del Trabajo Final Integrador de la TUP, un clon de Wordle",
+  "keywords": [],
+  "homepage": "https://github.com/VE1GA/UTN-TUP-TrabajoFinal#readme",
+  "bugs": {
+    "url": "https://github.com/VE1GA/UTN-TUP-TrabajoFinal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VE1GA/UTN-TUP-TrabajoFinal.git"
+  },
+  "license": "ISC",
+  "author": "FaustoPonce, VE1GA, mateeoz",
   "type": "module",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,10 +43,5 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
     "vite": "^6.3.5"
-  },
-  "description": "Trabajo Práctico Integrador de la materia \"Programación 3\" de la carrera \"Tecnicatura Universitaria en Programación\" de la UTN Rosario, cursada en 2025.",
-  "main": "eslint.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
