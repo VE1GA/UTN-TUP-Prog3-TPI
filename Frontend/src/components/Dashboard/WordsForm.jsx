@@ -6,11 +6,8 @@ import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 import { toast, Slide } from "react-toastify";
 
-import { Validations } from "../../services/Validations";
-import {
-  toastSuccessConfig,
-  toastErrorConfig,
-} from "../../pages/AdminDashboard";
+import { Validations } from "../../utils/Validations";
+import { toastSuccessConfig, toastErrorConfig } from "../../pages/AdminDashboard";
 
 const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
   // Declaraciones
@@ -105,17 +102,12 @@ const WordsForm = ({ wordTemporal, getWordsList, onSaveSuccess, onCancel }) => {
           return;
         }
         const errorData = await response.json();
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       await getWordsList();
       onSaveSuccess();
-      toast.success(
-        `Palabra "${formData.value}" ${mensaje}`,
-        toastSuccessConfig
-      );
+      toast.success(`Palabra "${formData.value}" ${mensaje}`, toastSuccessConfig);
     }
   };
 

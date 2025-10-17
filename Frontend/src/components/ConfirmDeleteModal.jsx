@@ -1,4 +1,4 @@
-import "../../styles/ConfirmDeleteModal.css";
+import "../styles/ConfirmDeleteModal.css";
 import * as Icon from "react-bootstrap-icons";
 
 const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message }) => {

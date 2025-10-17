@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import RegisterForm from "../components/Auth/RegisterForm";
-import { Validations } from "../services/Validations";
+import RegisterForm from "../components/RegisterForm";
+import { Validations } from "../utils/Validations";
 
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo.
 
 import "../styles/Login.css";
 
-const Register = ({ setIsLoggedIn }) => {
+const Register = () => {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -54,26 +54,18 @@ const Register = ({ setIsLoggedIn }) => {
         .then((res) => res.json())
 
         .then((data) => {
-          console.log("Usuario registrado:", data);
-          toast.success(
-            data.message || "Usuario registrado con éxito!",
-            toastConfig
-          );
+          console.info("Usuario registrado:", data);
+          toast.success(data.message || "Usuario registrado con éxito!", toastConfig);
         })
 
         .catch((error) => {
           console.error("Ocurrió un error:", error);
-          toast.error(
-            "Ocurrió un error al registrar. Intente nuevamente.",
-            toastConfig
-          );
+          toast.error("Ocurrió un error al registrar. Intente nuevamente.", toastConfig);
         });
 
       setTimeout(() => {
         navigate("/iniciar_sesion");
       }, 2500);
-
-      setIsLoggedIn(true);
     }
   };
 

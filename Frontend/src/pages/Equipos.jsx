@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Equipos = () => {
+const Teams = () => {
   return <div>Equipos</div>;
 };
+
+export default Teams;

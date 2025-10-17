@@ -1,9 +1,9 @@
 const validarNombre = (nombre) => {
   if (!nombre.trim()) return "El nombre es obligatorio";
-  if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombre))
-    return "Solo se permiten letras";
+  if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombre)) return "Solo se permiten letras";
   return null;
 };
+
 const validarEmail = (email) => {
   if (!email.trim()) return "El email es obligatorio";
   if (!/\S+@\S+\.\S+/.test(email)) return "El email no es válido";
@@ -18,8 +18,7 @@ const validarPassword = (password) => {
 };
 
 const validarConfirmPassword = (password, confirmPassword) => {
-  if (!confirmPassword.trim())
-    return "La confirmación de contraseña es obligatoria";
+  if (!confirmPassword.trim()) return "La confirmación de contraseña es obligatoria";
   if (password !== confirmPassword) return "Las contraseñas no coinciden";
   return null;
 };
@@ -64,16 +63,13 @@ export const Validations = async (datos, tipoValidacion) => {
       });
 
       const emailRepetido = await response.json();
-      if (emailRepetido) errores.repetido = "El email ya está registrado";
+      if (emailRepetido) errores.repetido = "Ya existe una cuenta registrada con ese correo";
     }
 
     const errorPassword = validarPassword(datos.password);
     if (errorPassword) errores.password = errorPassword;
 
-    const errorConfirmPassword = validarConfirmPassword(
-      datos.password,
-      datos.confirmPassword
-    );
+    const errorConfirmPassword = validarConfirmPassword(datos.password, datos.confirmPassword);
     if (errorConfirmPassword) errores.confirmPassword = errorConfirmPassword;
   }
 

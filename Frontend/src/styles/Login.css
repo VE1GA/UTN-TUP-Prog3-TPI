@@ -10,7 +10,7 @@
   height: 100vh;
   margin: 0;
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)),
-    url("/hacker-background.png");
+    url("../assets/hackerBackground.webp");
 }
 
 .login-form.body .container,
@@ -79,6 +79,7 @@
   font-size: 1em;
   width: 100%;
   margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 .login-form.body button:hover,
