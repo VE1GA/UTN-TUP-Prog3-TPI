@@ -1,8 +1,9 @@
 import "react-toastify/dist/ReactToastify.css";
+import "../styles/App.css";
 
 import { createContext, useState, useEffect } from "react";
 
-import Modal from ".././styles/Modal";
+import Modal from "../components/Modal";
 import { toast, Slide } from "react-toastify";
 
 import Board from "../components/Game/Board";
@@ -10,7 +11,6 @@ import Keyboard from "../components/Game/Keyboard";
 import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
 import { useNavigate } from "react-router-dom";
-import "../styles/App.css";
 
 export const WordleContext = createContext();
 

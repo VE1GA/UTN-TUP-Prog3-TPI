@@ -1,98 +1,89 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import LoginForm from "../components/Auth/LoginForm";
-import { Validations } from "../services/Validations";
-
-import { toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Aunque ya esté en App.jsx, es buena práctica tenerlo por si este componente se usa en otro contexto.
-
 import "../styles/Login.css";
 
-const Login = ({ setIsLoggedIn }) => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useField } from "../hooks/useField";
+import { Validations } from "../utils/Validations";
+import { useApi } from "../hooks/useApi";
 
+import WordleLogo from "../assets/wordle.webp";
+
+const Login = () => {
   const navigate = useNavigate();
+  const api = useApi();
 
-  const toastConfig = {
-    position: "top-center",
-    autoClose: 2500,
-    theme: "dark",
-    transition: Slide,
-  };
+  const email = useField("email", "email", "example@wordle.com");
+  const password = useField("password", "password", "Ingrese su contraseña");
 
-  const terminarLogueo = (userRole) => {
-    if (userRole === "ADMIN") {
-      navigate("/admin_dashboard");
-    } else {
-      navigate("/play");
-    }
-  };
+  const [errorMessages, setErrorMessages] = useState({});
 
-  const [errores, setErrores] = useState({});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const manejarEnvio = async (FormData) => {
-    const errores = await Validations(FormData, "login");
+    const formData = {
+      email: email.value,
+      password: password.value,
+    };
 
-    if (Object.keys(errores).length > 0) {
-      if (errores.email && emailRef.current) {
-        emailRef.current.focus();
-      } else if (errores.password && passwordRef.current) {
-        passwordRef.current.focus();
+    const errorList = await Validations(formData, "login");
+
+    if (Object.keys(errorList).length > 0) {
+      setErrorMessages(errorList);
+
+      if (errorList.email && email.ref.current) {
+        email.ref.current.focus();
+      } else if (errorList.password && password.ref.current) {
+        password.ref.current.focus();
       }
-
-      setErrores(errores);
     } else {
-      setErrores({});
-      fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(FormData),
-      })
-        .then((res) => res.json())
+      // Credenciales válidas
+      setErrorMessages({});
+      const user = await api.login(formData);
 
-        .then((data) => {
-          if (data.token && data.user) {
-            console.log("[Login Page] Token recibido del backend:", data.token);
-            console.log("Usuario logueado:", data);
-            localStorage.setItem("authToken", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            setIsLoggedIn(true);
-            toast.success(
-              data.message || "Usuario logueado con éxito",
-              toastConfig
-            );
-            // Redirigir después de un breve retraso
-            setTimeout(() => terminarLogueo(data.user.role), 1000);
+      // Inicio válido
+      if (user) {
+        setTimeout(() => {
+          if (user.role === "ADMIN") {
+            navigate("/admin_dashboard");
           } else {
-            // Manejar errores de login (ej. credenciales incorrectas)
-            console.error("Error de login:", data.message);
-            toast.error(data.message || "Error al iniciar sesión", toastConfig);
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
-            setIsLoggedIn(false); // Corregido: Si hay error de login, no debería estar logueado.
+            navigate("/play");
           }
-        })
-        .catch((error) => {
-          console.error("Ocurrió un error:", error);
-          toast.error(
-            "Ocurrió un error de conexión. Intente nuevamente.",
-            toastConfig
-          );
-        });
+        }, 1000); // 1 segundo de retraso para que se vea el toast
+      }
     }
   };
 
   return (
-    <div>
-      <LoginForm
-        onSubmit={manejarEnvio}
-        errores={errores}
-        refs={{ emailRef, passwordRef }}
-      />
+    <div className="login-form body">
+      <div className="container">
+        <h1>Wordle</h1>
+        <img src={WordleLogo} alt="Logo de Wordle" />
+        <h4>Inicio de sesión</h4>
+
+        <form onSubmit={handleSubmit} noValidate>
+          <div>
+            <label>Email: </label>
+            <input {...email} />
+            {errorMessages.email && <p style={{ color: "red" }}>{errorMessages.email}</p>}
+          </div>
+
+          <div>
+            <label>Contraseña: </label>
+            <input {...password} />
+            {errorMessages.password && <p style={{ color: "red" }}>{errorMessages.password}</p>}
+          </div>
+
+          <button type="submit">Iniciar sesión</button>
+        </form>
+
+        <button onClick={() => navigate("/")}>Volver al inicio</button>
+        <p style={{ marginTop: "15px" }}>
+          {"¿No tienes una cuenta? "}
+          <a href="#" onClick={() => navigate("/registrarse")}>
+            Regístrate
+          </a>
+        </p>
+      </div>
     </div>
   );
 };

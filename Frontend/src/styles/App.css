@@ -100,10 +100,7 @@ button {
     Esto evita el "padding-bottom: 100%; height: 0;" que causaba el estiramiento vertical.
     Browser support for aspect-ratio is good now (https://caniuse.com/css-aspect-ratio).
   */
-  height: min(
-    60px,
-    16vw
-  ); /* Define la altura de la casilla, ajustando según el viewport */
+  height: min(60px, 16vw); /* Define la altura de la casilla, ajustando según el viewport */
   /* min: 60px para el tamaño más grande, 16vw para responsividad */
   aspect-ratio: 1 / 1; /* ¡Hace que la casilla sea cuadrada! */
 
@@ -112,11 +109,7 @@ button {
   display: flex; /* Usamos flex para centrar contenido */
   justify-content: center;
   align-items: center;
-  font-size: clamp(
-    20px,
-    6vw,
-    32px
-  ); /* Tamaño de fuente responsivo para las letras */
+  font-size: clamp(20px, 6vw, 32px); /* Tamaño de fuente responsivo para las letras */
   font-weight: bolder;
   color: white;
   font-family: Arial, Helvetica, sans-serif;

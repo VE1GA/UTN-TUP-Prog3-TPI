@@ -6,14 +6,11 @@ import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 import { toast } from "react-toastify";
 
-import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import Modal from "../Modal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 
 import WordsForm from "./WordsForm";
-import {
-  toastSuccessConfig,
-  toastErrorConfig,
-} from "../../pages/AdminDashboard";
+import { toastSuccessConfig, toastErrorConfig } from "../../pages/AdminDashboard";
 
 const ManageWords = () => {
   const [wordList, setWordList] = useState([]);
@@ -26,8 +23,7 @@ const ManageWords = () => {
   });
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
   const [wordToDelete, setWordToDelete] = useState(null);
 
   const navigate = useNavigate();
@@ -116,55 +112,37 @@ const ManageWords = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("No token found. Redirecting to login.");
-      toast.error(
-        "Sesión expirada, por favor inicia sesión nuevamente.",
-        toastErrorConfig
-      );
+      toast.error("Sesión expirada, por favor inicia sesión nuevamente.", toastErrorConfig);
       navigate("/iniciar_sesion");
       return;
     }
 
-    console.log(
-      "[WordsManage] Enviando token para confirmDeleteHandler:",
-      token
-    );
+    console.log("[WordsManage] Enviando token para confirmDeleteHandler:", token);
     try {
-      const response = await fetch(
-        `http://localhost:3000/words/${wordToDelete.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3000/words/${wordToDelete.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
           console.error("Token invalid or expired. Redirecting to login.");
           localStorage.removeItem("authToken");
           localStorage.removeItem("user");
-          toast.error(
-            "Sesión inválida o expirada. Redirigiendo al login.",
-            toastErrorConfig
-          );
+          toast.error("Sesión inválida o expirada. Redirigiendo al login.", toastErrorConfig);
           navigate("/iniciar_sesion");
           return;
         }
         const errorData = await response.json().catch(() => ({})); // Intenta parsear JSON, si falla, objeto vacío
         throw new Error(errorData.message || `Error HTTP: ${response.status}`);
       }
-      toast.success(
-        `Palabra "${wordToDelete.value}" eliminada correctamente.`,
-        toastSuccessConfig
-      );
+      toast.success(`Palabra "${wordToDelete.value}" eliminada correctamente.`, toastSuccessConfig);
       await getWordsList();
     } catch (error) {
       console.error("Error deleting word:", error);
-      toast.error(
-        error.message || "Error al eliminar la palabra.",
-        toastErrorConfig
-      );
+      toast.error(error.message || "Error al eliminar la palabra.", toastErrorConfig);
     } finally {
       setIsConfirmDeleteModalOpen(false);
       setWordToDelete(null);
@@ -183,10 +161,7 @@ const ManageWords = () => {
             <li key={word.id}>
               {word.value} (Probabilidad: {word.luck})
               <div>
-                <button
-                  className="edit-button"
-                  onClick={() => editHandler(word)}
-                >
+                <button className="edit-button" onClick={() => editHandler(word)}>
                   <Icon.PencilFill color="#EBAE2D" />
                 </button>
                 <button

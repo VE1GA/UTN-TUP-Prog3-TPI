@@ -8,11 +8,9 @@ import * as Icon from "react-bootstrap-icons";
 import { toast, Slide } from "react-toastify";
 
 import { getToken, checkToken } from "../../services/Token.services";
-import { Validations } from "../../services/Validations";
-import {
-  toastSuccessConfig,
-  toastErrorConfig,
-} from "../../pages/AdminDashboard";
+import { Validations } from "../../utils/Validations";
+
+import { toastSuccessConfig, toastErrorConfig } from "../../pages/AdminDashboard";
 
 const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -109,20 +107,14 @@ const UsersForm = ({ userTemporal, getUsersList, onSaveSuccess, onCancel }) => {
       getUsersList();
 
       onSaveSuccess();
-      toast.success(
-        `Cuenta "${datosEnviar.name}" ${mensaje}`,
-        toastSuccessConfig
-      );
+      toast.success(`Cuenta "${datosEnviar.name}" ${mensaje}`, toastSuccessConfig);
     }
   };
 
   return (
     <form onSubmit={submitHandler} noValidate>
       <div>
-        <h1>
-          {" "}
-          {userTemporal.creando ? "Creando usuario" : "Editando usuario"}
-        </h1>
+        <h1> {userTemporal.creando ? "Creando usuario" : "Editando usuario"}</h1>
 
         <label>Nombre: </label>
         <input

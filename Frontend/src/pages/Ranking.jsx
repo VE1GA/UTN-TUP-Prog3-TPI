@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Ranking = () => {
+const Ranking = () => {
   return <div>Ranking</div>;
 };
+
+export default Ranking;

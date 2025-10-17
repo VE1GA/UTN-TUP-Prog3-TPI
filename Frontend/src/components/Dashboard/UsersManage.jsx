@@ -6,14 +6,11 @@ import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 import { toast } from "react-toastify";
 
-import Modal from "../../styles/Modal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import Modal from "../../components/Modal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 
 import UsersForm from "./UsersForm";
-import {
-  toastSuccessConfig,
-  toastErrorConfig,
-} from "../../pages/AdminDashboard";
+import { toastSuccessConfig, toastErrorConfig } from "../../pages/AdminDashboard";
 import { getToken, checkToken } from "../../services/Token.services";
 
 const UsersManage = () => {
@@ -29,8 +26,7 @@ const UsersManage = () => {
   const navigate = useNavigate();
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
   const getUsersList = async () => {
@@ -101,28 +97,19 @@ const UsersManage = () => {
 
     const token = getToken(navigate);
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/${userToDelete.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3000/users/${userToDelete.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       checkToken(response, navigate);
 
-      toast.success(
-        `Usuario "${userToDelete.name}" eliminado correctamente.`,
-        toastSuccessConfig
-      );
+      toast.success(`Usuario "${userToDelete.name}" eliminado correctamente.`, toastSuccessConfig);
       await getUsersList(); // Recargar la lista después de borrar
     } catch (error) {
       console.error("Error deleting user:", error);
-      toast.error(
-        error.message || "Error al eliminar el usuario.",
-        toastErrorConfig
-      );
+      toast.error(error.message || "Error al eliminar el usuario.", toastErrorConfig);
     } finally {
       setIsConfirmDeleteModalOpen(false);
       setUserToDelete(null);
@@ -153,10 +140,7 @@ const UsersManage = () => {
                 {user.role === "ADMIN" ? (
                   <Icon.PersonFillGear className="admin-icon" color="#172EFF" />
                 ) : null}
-                <button
-                  className="edit-button"
-                  onClick={() => editHandler(user)}
-                >
+                <button className="edit-button" onClick={() => editHandler(user)}>
                   <Icon.PencilFill color="#EBAE2D" />
                 </button>
                 <button
