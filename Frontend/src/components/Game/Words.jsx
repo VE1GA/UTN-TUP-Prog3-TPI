@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 import { getToken, checkToken } from "../../services/Token.services";
 
 export const boardDefault = [
@@ -10,8 +8,6 @@ export const boardDefault = [
   ["", "", "", "", ""],
   ["", "", "", "", ""],
 ];
-
-const navigate = useNavigate;
 
 const luckyWordBank = (words) => {
   const pesoTotal = words.reduce((sum, word) => {
@@ -32,8 +28,9 @@ const luckyWordBank = (words) => {
   }
 };
 
-export const generateGameWords = async () => {
-  const token = getToken(navigate);
+export const generateGameWords = async (navigate) => {
+  const token = getToken(navigate); // Ahora 'navigate' está definido
+  if (!token) return; // Si getToken falla, salir
 
   const response = await fetch("http://localhost:3000/words", {
     headers: {
