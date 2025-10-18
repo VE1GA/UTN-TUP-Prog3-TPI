@@ -12,6 +12,8 @@ import GameOver from "../components/Game/GameOver";
 import { boardDefault, generateGameWords } from "../components/Game/Words";
 import { useNavigate } from "react-router-dom";
 
+import { getToken, checkToken } from "../services/Token.services";
+
 export const WordleContext = createContext();
 
 const Wordle = () => {
@@ -34,6 +36,30 @@ const Wordle = () => {
     transition: Slide,
   };
 
+  const saveGame = async (didWin, attemptsCount) => {
+    const token = getToken(navigate);
+    if (!token) return;
+
+    try {
+      const response = await fetch("http://localhost:3000/save_game", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ didWin, attemptsCount }),
+      });
+
+      checkToken(response, navigate);
+
+      const data = await response.json();
+      console.log("Partida guardada:", data.message);
+    } catch (error) {
+      console.error("Error al guardar partida:", error);
+      toast.error("Error al guardar la partida.", toastConfig);
+    }
+  };
+
   const resetGame = async () => {
     const newBoard = boardDefault.map((row) => row.map(() => ""));
 
@@ -42,60 +68,75 @@ const Wordle = () => {
     setDisabledLetters([]);
     setGameOver({ gameOver: false, guessedWord: false });
 
-    const words = await generateGameWords();
-    setWordBank(words.wordBank);
-    setCorrectWord(words.correctWord);
-
-    console.log(words);
+    const words = await generateGameWords(navigate);
+    if (words) {
+      setWordBank(words.wordBank);
+      setCorrectWord(words.correctWord);
+      console.log("Nueva partida:", words);
+    }
   };
 
   useEffect(() => {
-    generateGameWords().then((words) => {
-      setWordBank(words.wordBank);
-      setCorrectWord(words.correctWord);
-
-      console.log(words);
+    generateGameWords(navigate).then((words) => {
+      if (words) {
+        setWordBank(words.wordBank);
+        setCorrectWord(words.correctWord);
+        console.log("Palabras cargadas:", words);
+      }
     });
-  }, []);
+  }, [navigate]);
 
-  // Funciones
   const onSelectLetter = (keyVal) => {
     if (currAttempt.letterPos > 4) return;
-    const newBoard = [...board];
+    const newBoard = board.map((row) => [...row]);
     newBoard[currAttempt.attempt][currAttempt.letterPos] = keyVal;
     setBoard(newBoard);
     setCurrAttempt({ ...currAttempt, letterPos: currAttempt.letterPos + 1 });
   };
 
   const onEnter = () => {
-    if (currAttempt.letterPos !== 5) return; // Si todavía no se completó el renglón, no es posible apretar "Enter"
+    if (currAttempt.letterPos !== 5) return; // No completó la fila entera de letras
+
     let currWord = "";
     for (let i = 0; i < 5; i++) {
       currWord += board[currAttempt.attempt][i];
     }
-    if (wordBank.has(currWord.toUpperCase())) {
-      setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 }); // Pasa al siguiente renglón
-    } else {
+
+    const currentAttemptIndex = currAttempt.attempt; // Se guarda el intento actual por el que vamos
+
+    //  Valida si la palabra existe
+    if (!wordBank.has(currWord.toUpperCase())) {
       toast.error("Palabra no válida", toastConfig);
-    }
-    if (currWord.toUpperCase() === correctWord) {
-      setGameOver({ gameOver: true, guessedWord: true });
       return;
     }
-    if (currAttempt.attempt === 5) {
+
+    // La palabra es válida, pasar al siguiente intento
+    setCurrAttempt({ attempt: currentAttemptIndex + 1, letterPos: 0 });
+
+    // Se chequea si ganó
+    if (currWord.toUpperCase() === correctWord) {
+      setGameOver({ gameOver: true, guessedWord: true });
+      // Llamamos a saveGame para guardar la partida (true, y el número de intento 1-6)
+      saveGame(true, currentAttemptIndex + 1);
+      return;
+    }
+
+    // 4. Se chequea si PERDIÓ (si acaba de terminar el último intento, índice 5)
+    if (currentAttemptIndex === 5) {
       setGameOver({ gameOver: true, guessedWord: false });
+      // Llamamos a saveGame para guardar la partida (false, -1 para indicar derrota)
+      saveGame(false, -1);
     }
   };
 
   const onDelete = () => {
     if (currAttempt.letterPos === 0) return;
-    const newBoard = [...board];
+    const newBoard = board.map((row) => [...row]);
     newBoard[currAttempt.attempt][currAttempt.letterPos - 1] = "";
     setBoard(newBoard);
     setCurrAttempt({ ...currAttempt, letterPos: currAttempt.letterPos - 1 });
   };
 
-  // Renderizado
   return (
     <div className="App">
       <WordleContext.Provider

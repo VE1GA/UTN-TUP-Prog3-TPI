@@ -2,7 +2,7 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 import Wordle from "./Wordle";
-import Perfil from "./Perfil";
+import Perfil from "./Profile";
 import Equipos from "./Equipos";
 import Ranking from "./Ranking";
 import AdminDashboard from "./AdminDashboard";

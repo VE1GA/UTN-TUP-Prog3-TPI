@@ -2,11 +2,13 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import { JWT_SECRET } from "../config.js";
-import { User } from "../db.js";
+import { User, Stat } from "../db.js";
 
 export const registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   const newUser = await User.create({ name, email, password, role });
+
+  await Stat.create({ userId: newUser.id });
 
   res.status(201).json({
     id: newUser.id,
@@ -83,8 +85,6 @@ export const crearAdminInicial = async () => {
     });
     console.log("[INFO] Administrador inicial creado correctamente.");
   } else {
-    console.log(
-      "[INFO] El administrador principal ya existe. No es necesario crearlo."
-    );
+    console.log("[INFO] El administrador principal ya existe. No es necesario crearlo.");
   }
 };
