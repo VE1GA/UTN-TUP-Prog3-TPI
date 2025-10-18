@@ -1,3 +1,5 @@
+// backend/src/models/stats.js
+
 import { DataTypes } from "sequelize";
 
 const StatModel = (sequelize) => {
@@ -12,30 +14,55 @@ const StatModel = (sequelize) => {
       gamesplayed: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       gameswon: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       gameslost: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       winrate: {
         type: DataTypes.FLOAT,
         allowNull: false,
+        defaultValue: 0,
       },
+      // Cambiamos a JSON para guardar un historial (ej: [5, 4, 5])
       attempts: {
+        type: DataTypes.JSON,
+        allowNull: false,
+        defaultValue: [],
+      },
+      streak: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
-      // Esta columna se agregará para la relación con Team
+      // Acá se guardarán los días de racha del usuario
+      lastWinDate: {
+        type: DataTypes.DATEONLY, // Solo nos importa la fecha
+        allowNull: true,
+      },
+      // Foreingkey para el usuario
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
+      // Foreignkey para el equipo
       teamId: {
         type: DataTypes.INTEGER,
         references: {
           model: "teams",
           key: "id",
         },
+        allowNull: true, // "un jugador puede no tener equipo"
       },
     },
     {

@@ -3,6 +3,7 @@ import { Router } from "express";
 import * as auth from "../services/auth.services.js";
 import * as words from "../services/words.services.js";
 import * as users from "../services/user.services.js";
+import * as stats from "../services/stats.services.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 
 export const router = Router();
@@ -22,5 +23,10 @@ router.post("/words", verifyToken, words.createNewWord);
 router.get("/words", verifyToken, words.getWordList);
 router.delete("/words/:id", verifyToken, words.DeleteWord);
 router.put("/words/:id", verifyToken, words.EditExistingWord);
+
+// Endopints de Estadísticas
+
+router.post("/save_game", verifyToken, stats.saveGameResult);
+router.get("/my_stats", verifyToken, stats.getMyStats);
 
 export default router;
